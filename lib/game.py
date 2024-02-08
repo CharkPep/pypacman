@@ -13,10 +13,12 @@ class Game:
 
     def render(self, surface: pygame.surface.Surface):
         self.map.render(surface)
+        for entity in self.entities:
+            entity.update()
+            entity.render(surface)
 
     def spawn_player(self):
-        map = self.map.get_map()
-        for line in map:
-            for row in line:
-                if isinstance(row, tile.PlayerSpawn):
-                    self.player = player.Player(None, pygame.rect.Rect(row.get_rect()))
+        for i in range(len(self.map.map)):
+            for j in range(len(self.map.map[i])):
+                if isinstance(self.map.map[i][j], tile.PlayerSpawn):
+                    self.entities.append(player.Player(None, (i, j), self.map))

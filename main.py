@@ -16,6 +16,7 @@ screen = pygame.display.set_mode(screen_size)
 render = parser.DefaultMapParser("./levels/big_map.txt", screen)
 game = Game()
 game.set_map(render.parse(screen_size))
+game.spawn_player()
 
 # game.spawn_player()
 pygame.display.set_caption("NPacman")
