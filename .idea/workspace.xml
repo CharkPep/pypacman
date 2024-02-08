@@ -4,16 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72a68bbc-c2c4-4545-874b-69d757b24341" name="Changes" comment="Implement basic map rendering">
-      <change afterPath="$PROJECT_DIR$/lib/map/tile.py" afterDir="false" />
+    <list default="true" id="72a68bbc-c2c4-4545-874b-69d757b24341" name="Changes" comment="Fuckaround findout">
+      <change afterPath="$PROJECT_DIR$/levels/small.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/entity/entity.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/entity/entity.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/entity/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/entity/player.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/map/big_map.txt" beforeDir="false" afterPath="$PROJECT_DIR$/levels/big_map.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/map/map.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/map/map.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/map/object.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/map/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/map/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/map/tile.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/map/tile.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,6 +25,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -131,7 +129,7 @@
       <workItem from="1707246800567" duration="17131000" />
       <workItem from="1707323261660" duration="341000" />
       <workItem from="1707396118143" duration="2150000" />
-      <workItem from="1707399080205" duration="6865000" />
+      <workItem from="1707399080205" duration="17074000" />
     </task>
     <task id="LOCAL-00001" summary="Implement basic map rendering">
       <option name="closed" value="true" />
@@ -141,7 +139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707323496928</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fuckaround findout">
+      <option name="closed" value="true" />
+      <created>1707408545048</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1707408545049</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,7 +158,8 @@
       <path value="$PROJECT_DIR$/.." />
     </ignored-roots>
     <MESSAGE value="Implement basic map rendering" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement basic map rendering" />
+    <MESSAGE value="Fuckaround findout" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fuckaround findout" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/pacman$.coverage" NAME=" Coverage Results" MODIFIED="1707225191204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/map" />

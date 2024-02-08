@@ -1,8 +1,5 @@
 from abc import ABC, abstractmethod
 import pygame
-from typing import Tuple, List
-from ..map import map
-
 
 class Entity(ABC):
 
