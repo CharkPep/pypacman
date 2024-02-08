@@ -1,37 +1,44 @@
-from .entity import Entity, AiStrategy
+from .entity import Entity
+from ..map.tile import Tile
 import pygame
+
+
 class Player(Entity):
     _instance = None
 
-    def __init__(self, image: pygame.image, rect : pygame.Rect, strategy: AiStrategy):
+    def __init__(self, image: pygame.image, rect: Tile):
+        """
+        :param image: assets
+        :param rect: MapObject where player is placed
+        """
         if self._instance is not None:
-            raise ValueError("An instance already exists")
-        self.__strategy = strategy
-        self._instance = self
+            return
         self.__image = image
         self.__rect = rect
         self.__speed = pygame.Vector2(0,0)
+        self._instance = self
 
-    def render(self, surface: pygame.surface.Surface):
-        pygame.draw.rect(surface, (255, 255, 255), self.__rect)
+    def update(self, surface: pygame.surface.Surface):
+        pygame.draw.rect(surface, (255, 0, 0), self.__rect)
         # surface.blit(self.__image, self.__rect)
 
     def move(self):
-        self.__strategy.move()
+        key = pygame.key.get_pressed()
+        if key[pygame.K_LEFT]:
+            self.__speed = pygame.Vector2(-1, 0)
+        if key[pygame.K_RIGHT]: 
+            self.__speed = pygame.Vector2(1, 0)
+        if key[pygame.K_UP]:
+            self.__speed = pygame.Vector2(0, -1)
+        if key[pygame.K_DOWN]:
+            self.__speed = pygame.Vector2(0, 1)
+        self.__rect.move_ip(self.__speed)
+        for line in map.get_map():
+            for row in line:
+                if row.collide(self.__rect):
+                    print("collide")
+                    break
+    def collide(self, other: pygame.rect.Rect):
+        return pygame.Rect.colliderect(self.__rect, other)
 
 
-class PlayerStrategy(AiStrategy):
-
-    def __init__(self):
-        pass
-
-    def move(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
-            print("UP")
-        if keys[pygame.K_DOWN]:
-            print("DOWN")
-        if keys[pygame.K_LEFT]:
-            print("LEFT")
-        if keys[pygame.K_RIGHT]:
-            print("RIGHT")

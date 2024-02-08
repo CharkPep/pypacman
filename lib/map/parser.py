@@ -1,32 +1,9 @@
 import os.path
 from abc import ABC, abstractmethod
 from .map import Map
-from .object import MapObject
+from .tile import Tile, ThinWall, Wall, OneWay, PlayerSpawn, Void
 from typing import Tuple
 import pygame
-
-
-class Wall(MapObject):
-    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
-        super().__init__(position, size, image)
-
-
-class ThinWall(MapObject):
-    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
-        super().__init__(position, size, image)
-
-
-class OneWay(MapObject):
-    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
-        super().__init__(position, size, image)
-
-
-class Void(MapObject):
-    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
-        super().__init__(position, size, image)
-
-    def isPassable(self):
-        return True
 
 
 class MapParser(ABC):
@@ -42,9 +19,9 @@ codes = {
     "e": None,
     "w": Wall,
     "t": ThinWall,
-    "s": None,
     "o": OneWay,
     "v": Void,
+    "s": PlayerSpawn
 }
 
 
