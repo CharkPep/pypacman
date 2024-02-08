@@ -1,7 +1,7 @@
 import os.path
 from abc import ABC, abstractmethod
 from .map import Map
-from .tile import Tile, ThinWall, Wall, OneWay, PlayerSpawn, Void
+import tile
 from typing import Tuple
 import pygame
 
@@ -16,12 +16,22 @@ class MapParser(ABC):
 
 
 codes = {
-    "e": None,
-    "w": Wall,
-    "t": ThinWall,
-    "o": OneWay,
-    "v": Void,
-    "s": PlayerSpawn
+    "0": tile.Void,
+    "1": tile.Dot,
+    "3": tile.BigDot,
+    "4": tile.TopWall,
+    "5": tile.RightWall,
+    "6": tile.BottomWall,
+    "7": tile.LeftWall,
+    "8": tile.LeftTopShortTurn,
+    "9": tile.RightTopShortTurn,
+    "10": tile.RightBottomShortTurn,
+    "11": tile.LeftBottomShortTurn,
+    "12": tile.LeftTopLongTurn,
+    "13": tile.RightTopLongTurn,
+    "14": tile.RightBottomLongTurn,
+    "15": tile.LeftBottomLongTurn,
+    "16": tile.OneWay
 }
 
 
