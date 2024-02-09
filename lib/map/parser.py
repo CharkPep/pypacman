@@ -1,7 +1,7 @@
 import os.path
 from abc import ABC, abstractmethod
 from .map import Map
-import tile
+from .tile import *
 from typing import Tuple
 import pygame
 
@@ -16,22 +16,23 @@ class MapParser(ABC):
 
 
 codes = {
-    "0": tile.Void,
-    "1": tile.Dot,
-    "3": tile.BigDot,
-    "4": tile.TopWall,
-    "5": tile.RightWall,
-    "6": tile.BottomWall,
-    "7": tile.LeftWall,
-    "8": tile.LeftTopShortTurn,
-    "9": tile.RightTopShortTurn,
-    "10": tile.RightBottomShortTurn,
-    "11": tile.LeftBottomShortTurn,
-    "12": tile.LeftTopLongTurn,
-    "13": tile.RightTopLongTurn,
-    "14": tile.RightBottomLongTurn,
-    "15": tile.LeftBottomLongTurn,
-    "16": tile.OneWay
+    "0": Void,
+    "1": Dot,
+    "3": BigDot,
+    "4": TopWall,
+    "5": RightWall,
+    "6": BottomWall,
+    "7": LeftWall,
+    "8": LeftTopShortTurn,
+    "9": RightTopShortTurn,
+    "a": RightBottomShortTurn,
+    "b": LeftBottomShortTurn,
+    "c": LeftTopLongTurn,
+    "d": RightTopLongTurn,
+    "f": RightBottomLongTurn,
+    "h": LeftBottomLongTurn,
+    "g": OneWay,
+    "i": PlayerSpawn,
 }
 
 
