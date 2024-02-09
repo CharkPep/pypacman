@@ -56,6 +56,7 @@ class Player(Entity):
         self.__rect.move_ip(self.__speed*2)
 
     def handle_input(self):
+        print(self.__current_tile, self.__direction_tile)
         current_position = self.__rect.center
         direction_position = self.__map.get_map()[int(self.__direction_tile[0])][int(self.__direction_tile[1])].get_rect().center
         key = pygame.key.get_pressed()

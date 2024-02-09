@@ -44,6 +44,9 @@ class Void(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
+    def passable(self):
+        return True
+
 
 # tile1.jpg
 class Dot(Tile):
