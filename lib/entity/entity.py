@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import pygame
 
+
 class Entity(ABC):
 
     @abstractmethod

@@ -17,8 +17,7 @@ render = parser.DefaultMapParser("./levels/small.txt", screen)
 game = Game()
 game.set_map(render.parse(screen_size))
 game.spawn_player()
-
-# game.spawn_player()
+game.spawn_score((1, 1), 10)
 pygame.display.set_caption("NPacman")
 clock = pygame.time.Clock()
 running = True
@@ -27,7 +26,6 @@ while running:
     for event in events:
         if event.type == pygame.QUIT:
             running = False
-    screen.fill((255, 255, 255))
     game.render(screen)
     pygame.display.flip()
     clock.tick(60)

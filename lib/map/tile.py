@@ -36,7 +36,7 @@ class PlayerSpawn(Tile):
         super().__init__(position, size, image)
 
     def passable(self):
-        return True 
+        return True
 
 
 # tile0.jpg

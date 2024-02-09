@@ -56,7 +56,6 @@ class Player(Entity):
         self.__rect.move_ip(self.__speed*2)
 
     def handle_input(self):
-        print(self.__current_tile, self.__direction_tile)
         current_position = self.__rect.center
         direction_position = self.__map.get_map()[int(self.__direction_tile[0])][int(self.__direction_tile[1])].get_rect().center
         key = pygame.key.get_pressed()
@@ -67,15 +66,15 @@ class Player(Entity):
                 self.handle_change_speed(self.next_move)
                 self.next_move = None
             next_tile = self.__current_tile[0] + self.__speed.y, self.__current_tile[1] + self.__speed.x
-            if not self.__map.get_map()[int(next_tile[0])][int(next_tile[1])].passable():
-                self.__speed = pygame.Vector2(0, 0)
             if next_tile[0] < 0 or next_tile[0] >= len(self.__map.get_map()) or next_tile[1] < 0 or next_tile[1] >= len(self.__map.get_map()[0]):
+                self.__speed = pygame.Vector2(0, 0)
+                return
+            if not self.__map.get_map()[int(next_tile[0])][int(next_tile[1])].passable():
                 self.__speed = pygame.Vector2(0, 0)
 
         if self.__direction_tile == self.__current_tile:
             self.handle_change_speed(key)
             self.__direction_tile = self.__current_tile[0] + self.__speed.y, self.__current_tile[1] + self.__speed.x
-            print(self.__map.get_map()[int(self.__direction_tile[0])][int(self.__direction_tile[1])])
             if not self.__map.get_map()[int(self.__direction_tile[0])][int(self.__direction_tile[1])].passable():
                 self.__speed = pygame.Vector2(0, 0)
                 self.__direction_tile = self.__current_tile
@@ -85,6 +84,9 @@ class Player(Entity):
 
     def render(self, surface: pygame.surface.Surface):
         pygame.draw.rect(surface, (255, 0, 0), self.__rect)
+
+    def get_rect(self):
+        return self.__rect
 
     def collide(self, other: pygame.rect.Rect):
         return pygame.Rect.colliderect(self.__rect, other)
