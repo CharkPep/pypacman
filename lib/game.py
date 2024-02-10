@@ -1,5 +1,6 @@
 from .map import map as Map, tile
 from .entity import entity, player, point
+from .entity.movement import TileBasedMovement
 from typing import List, Tuple
 import pygame
 
@@ -43,4 +44,5 @@ class Game:
         for i in range(len(self.map.map)):
             for j in range(len(self.map.map[i])):
                 if isinstance(self.map.map[i][j], tile.PlayerSpawn):
-                    self.__player = player.Player(None, (i, j), self.map)
+                    self.__player = player.Player(None, pygame.rect.Rect(self.map.map[i][j].get_rect()), 
+                                                  TileBasedMovement(self.map, (i, j)))
