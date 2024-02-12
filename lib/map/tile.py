@@ -13,12 +13,7 @@ class Tile:
         self.__image = image
 
     def render(self, surface: pygame.surface.Surface):
-        pygame.draw.rect(surface, (255, 255, 255), self.__rect)
-        pygame.draw.line(surface, (0, 0, 0), self.__rect.topleft, self.__rect.topright)
-        pygame.draw.line(surface, (0, 0, 0), self.__rect.topleft, self.__rect.bottomleft)
-        pygame.draw.line(surface, (0, 0, 0), self.__rect.bottomleft, self.__rect.bottomright)
-        pygame.draw.line(surface, (0, 0, 0), self.__rect.bottomright, self.__rect.topright)
-        # surface.blit(self.__image, self.__rect)
+        surface.blit(self.__image, self.__rect)
 
     def get_rect(self):
         return self.__rect

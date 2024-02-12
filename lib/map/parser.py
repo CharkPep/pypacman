@@ -18,8 +18,8 @@ class MapParser(ABC):
 codes = {
     "0": Void,
     "1": Dot,
-    "3": BigDot,
-    "4": TopWall,
+    "2": BigDot,
+    "3": TopWall,
     "5": RightWall,
     "6": BottomWall,
     "7": LeftWall,
@@ -71,6 +71,7 @@ class DefaultMapParser(MapParser):
             for j in range(len(game_map[i])):
                 if game_map[i][j] is None:
                     continue
-                rectangle_image = None
+                tile_code = game_map[i][j].__name__
+                rectangle_image = pygame.image.load(f"assets/mapTiles/tile{tile_code}.jpg")
                 game_map[i][j] = game_map[i][j]((first_rectangle_position[0] + size * j, first_rectangle_position[1] + size * i), (size, size), rectangle_image)
         return Map(game_map)
