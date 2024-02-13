@@ -16,8 +16,7 @@ class Score(Entity):
         pass
 
     def render(self, surface: pygame.surface.Surface):
-        pygame.draw.rect(surface, (255, 0, 255), self.__position)
-        # surface.blit(self.__img, self.__position)
+        pygame.draw.circle(surface, (255, 255, 255), self.__position.center, 1.5)
         pass
 
     def collide(self, other: pygame.rect.Rect):
