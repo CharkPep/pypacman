@@ -35,7 +35,6 @@ codes = {
     "i": PlayerSpawn,
 }
 
-
 class DefaultMapParser(MapParser):
     __file = ""
 

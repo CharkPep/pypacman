@@ -1,43 +1,33 @@
-import math
-
 from .entity import Entity
-from .movement import MovementStrategy
-from ..map.map import Map
-from typing import  Tuple
 import pygame
+from typing import Tuple
+from .movement.strategy import MovementStrategy
+from .movement.tileMovement import TileBasedMovement
+from ..map.map import Map
 
 
 class Player(Entity):
 
-    def __init__(self, image: pygame.image, rect: pygame.rect.Rect, movement: MovementStrategy):
-        """
-        :param image: assets
-        :param rect: MapObject where player is placed
-        """
-        self.movement = movement
-        self.next_move = None
+    def __init__(self, image: pygame.image, position: Tuple[int ,int], map: Map):
+        self.__rect = pygame.rect.Rect(position[0], position[1], map.get_tile(0,0).get_rect().width, map.get_tile(0,0).get_rect().width)
+        self.movement: MovementStrategy = TileBasedMovement(map, self.__rect, position) 
         self.__image = image
-        self.__rect = rect
+
+    def get_movement(self):
+        return self.movement
 
     def update(self):
-        direction = self.handle_input(pygame.key.get_pressed())
-        if direction is None:
-            if self.next_move is not None:
-                direction = self.next_move
-        if self.movement.move(self.__rect, direction):
-            self.next_move = None
-        else:
-            self.next_move = direction
+        self.movement.move()
 
-    def handle_input(self, key):
-        if key[pygame.K_UP]:
-            return pygame.Vector2(0, -1)
-        elif key[pygame.K_DOWN]:
-            return pygame.Vector2(0, 1)
-        elif key[pygame.K_LEFT]:
-            return pygame.Vector2(-1, 0)
-        elif key[pygame.K_RIGHT]:
-            return pygame.Vector2(1, 0)
+    def handle_event(self, event):
+        if event == pygame.K_UP:
+            self.movement.set_speed(pygame.Vector2(0, -1))
+        elif event == pygame.K_DOWN:
+            self.movement.set_speed(pygame.Vector2(0, 1))
+        elif event == pygame.K_LEFT:
+            self.movement.set_speed(pygame.Vector2(-1, 0))
+        elif event == pygame.K_RIGHT:
+            self.movement.set_speed(pygame.Vector2(1, 0))
         return None
 
     def render(self, surface: pygame.surface.Surface):
