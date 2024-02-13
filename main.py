@@ -13,7 +13,7 @@ screen_size = (int(args['width']), int(args['height']))
 # Create a window
 pygame.init()
 screen = pygame.display.set_mode(screen_size)
-render = parser.DefaultMapParser("./levels/small.txt", screen)
+render = parser.DefaultMapParser("./levels/original.txt", screen)
 game = Game()
 game.set_map(render.parse(screen_size))
 game.spawn_player()
