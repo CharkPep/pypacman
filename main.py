@@ -1,4 +1,5 @@
 from lib.map import map, parser, tile
+from lib.entity.player import Player
 from lib.states.gameplay import GameplayState
 from lib.game import Game
 import pygame
@@ -15,8 +16,10 @@ screen_size = (int(args['width']), int(args['height']))
 pygame.init()
 screen = pygame.display.set_mode(screen_size)
 render = parser.DefaultMapParser("./levels/small.txt", screen)
-gameplay = GameplayState(render.parse(screen_size), screen)
+map = render.parse(screen_size)
+gameplay = GameplayState(map, screen)
 game = Game(gameplay)
+gameplay.add_entity(Player(None, (4, 4), map))
 pygame.display.set_caption("NPacman")
 running = True
 while running:

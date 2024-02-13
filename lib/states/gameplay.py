@@ -9,7 +9,6 @@ import pygame
 class GameplayState(GameState):
     __map: Map = None
     __entities: List[Entity] = []
-    __players: List[Player] = []
     __font: pygame.font.Font = None
     score: int = 0
 
@@ -18,12 +17,13 @@ class GameplayState(GameState):
         self.__screen = screen
         self.font = pygame.font.SysFont('Comic Sans MS', 30)
 
+    def add_entity(self, entity: Entity):
+        self.__entities.append(entity)
+
     def render(self):
         self.__map.render(self.__screen)
         for entity in self.__entities:
             entity.render(self.__screen)
-        for player in self.__players:
-            player.render(self.__screen)
         self.__screen.blit(self.font.render(f"Score: {self.score}", True, (255, 255, 255)), (0, 0))
 
     def update(self):
@@ -37,7 +37,7 @@ class GameplayState(GameState):
             entity.update()
 
     def handle_event(self, event):
-        for player in self.__players:
+        for player in self.__entities:
             player.handle_event(event)
 
     def next(self, event):
