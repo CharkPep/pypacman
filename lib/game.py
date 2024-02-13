@@ -19,7 +19,9 @@ class Game:
         self.map = map
 
     def render(self, surface: pygame.surface.Surface):
-        img = self.font.render("Score: " + str(self.score), True, (0, 0, 0))
+        surface.fill((0, 0, 0))
+
+        img = self.font.render("Score: " + str(self.score), True, (255, 255, 255))
         self.map.render(surface)
         for entity in self.entities:
             entity.update()
@@ -29,9 +31,15 @@ class Game:
         self.__player.render(surface)
         surface.blit(img, (10, 10))
 
-    def spawn_score(self, position: Tuple[int,int], score: int):
-        position_on_map = self.map.get_map()[position[0]][position[1]].get_rect()
-        self.entities.append(point.Score(score, position_on_map, self.font))
+    def spawn_score(self, file_path: str, score: int):
+        with open(file_path, 'r') as file:
+            matrix = [[int(char) for char in line.strip()] for line in file if line.strip()]
+
+        for i in range(len(matrix)):
+            for j in range(len(matrix[i])):
+                if matrix[i][j] == 1:
+                    position_on_map = self.map.get_map()[i][j].get_rect()
+                    self.entities.append(point.Score(score, position_on_map, self.font))
 
     def __check_score(self):
         for entity in self.entities:
