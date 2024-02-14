@@ -42,7 +42,6 @@ codes = {
     "n": RightTopTurn,
 }
 
-
 class DefaultMapParser(MapParser):
     __file = ""
 

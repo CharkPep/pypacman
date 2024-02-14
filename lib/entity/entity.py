@@ -20,6 +20,14 @@ class Entity(ABC):
         pass
 
     @abstractmethod
+    def handle_event(self, event):
+        """
+        Handles the event
+        :param event: Event to handle
+        """
+        pass
+
+    @abstractmethod
     def collide(self, other: pygame.rect.Rect):
         pass
 
