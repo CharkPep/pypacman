@@ -14,6 +14,7 @@ class Map:
         self.__map = map
 
     def render(self, surface : pygame.surface.Surface):
+        surface.fill((0, 0, 0))
         for layer in self.__map:
             for tile in layer:
                 if tile is not None:

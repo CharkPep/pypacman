@@ -1,7 +1,7 @@
 from lib.map import map, parser, tile
 from lib.game import Game
-from lib.entity.ghost import Ghost
-from lib.entity.state.manager import StateManager, States
+from lib.states.gameplay import GameplayState
+from lib.entity.player import Player
 import pygame
 import argparse
 app = argparse.ArgumentParser()
@@ -27,4 +27,3 @@ while running:
     game.handle_events(pygame.event.get())
     game.update()
     game.render()
-    pygame.display.flip()
