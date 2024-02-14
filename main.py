@@ -1,3 +1,5 @@
+import time
+
 from lib.map import map, parser, tile
 from lib.game import Game
 from lib.states.gameplay import GameplayState
@@ -23,7 +25,16 @@ player = Player(None, (4, 4), map)
 gameplay.add_entity(player)
 pygame.display.set_caption("NPacman")
 running = True
+clock = pygame.time.Clock()
+current_time = time.time()
+prev_time = current_time
+FPS = 60
+TARGET_FPS = 60
 while running:
+    current_time = time.time()
     game.handle_events(pygame.event.get())
-    game.update()
+    game.update(current_time - prev_time)
+    prev_time = current_time
     game.render()
+    clock.tick(FPS)
+    pygame.display.flip()

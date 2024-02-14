@@ -5,7 +5,7 @@ class GameState(ABC):
     def handle_event(self, event):
         pass
 
-    def update(self):
+    def update(self, dt: float):
         pass
 
     def render(self):

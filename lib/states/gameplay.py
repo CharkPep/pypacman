@@ -26,17 +26,10 @@ class GameplayState(GameState):
         for entity in self.__entities:
             entity.render(self.__screen)
         self.__screen.blit(self.font.render(f"Score: {self.score}", True, (255, 255, 255)), (0, 0))
-        pygame.display.flip()
 
-    def update(self):
-        # for player in self.__players:
-        #     player.update()
-        #     for entity in self.__entities:
-        #         if player.collide(entity.get_rect()):
-        #             self.score += 1
-        #             entity.reset()
+    def update(self, dt: float):
         for entity in self.__entities:
-            entity.update()
+            entity.update(dt)
 
     def handle_event(self, event):
         for entity in self.__entities:

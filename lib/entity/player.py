@@ -2,7 +2,7 @@ from .entity import Entity
 import pygame
 from typing import Tuple
 from .movement.strategy import MovementStrategy
-from .movement.tileMovement import TileBasedMovement
+from .movement.tile_movement import TileBasedMovement
 from ..map.map import Map
 
 
@@ -16,8 +16,8 @@ class Player(Entity):
     def get_movement(self):
         return self.movement
 
-    def update(self):
-        self.movement.move()
+    def update(self, dt: float):
+        self.movement.move(dt)
 
     def handle_event(self, event: pygame.event.Event):
         if event.dict.get('key') == pygame.K_UP and event.type == pygame.KEYDOWN:
@@ -32,6 +32,7 @@ class Player(Entity):
 
     def render(self, surface: pygame.surface.Surface):
         pygame.draw.rect(surface, (255, 0, 0), self.__rect)
+        pygame.draw.line(surface, (0, 255, 0), self.__rect.center, self.__rect.center + self.movement.get_speed() * 20)
 
     def get_rect(self):
         return self.__rect

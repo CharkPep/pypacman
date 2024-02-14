@@ -20,16 +20,20 @@ class StateManager:
     def __init__(self, map: Map):
         self.__map = map
         self.__states = {
-            # ChaseState: ChaseState(map),
+            ChaseState: ChaseState(map),
             # ScatterState: ScatterState(map)
             # EatenState: EatenState(map),
             # FrightenedState: FrightenedState(map)
         }
+        self.current_state = States.CHASE
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
+
+    def handle_event(self, event):
+        
 
     def get_state(self, state: States):
         return self.__states[state.value]
