@@ -13,12 +13,7 @@ class Tile:
         self.__image = image
 
     def render(self, surface: pygame.surface.Surface):
-        pygame.draw.rect(surface, (255, 255, 255), self.__rect)
-        pygame.draw.line(surface, (0, 0, 0), self.__rect.topleft, self.__rect.topright)
-        pygame.draw.line(surface, (0, 0, 0), self.__rect.topleft, self.__rect.bottomleft)
-        pygame.draw.line(surface, (0, 0, 0), self.__rect.bottomleft, self.__rect.bottomright)
-        pygame.draw.line(surface, (0, 0, 0), self.__rect.bottomright, self.__rect.topright)
-        # surface.blit(self.__image, self.__rect)
+        surface.blit(self.__image, self.__rect)
 
     def get_rect(self):
         return self.__rect
@@ -30,7 +25,6 @@ class Tile:
         return pygame.Rect.colliderect(self.__rect, other)
 
 
-# tile0.jpg
 class PlayerSpawn(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
@@ -39,7 +33,6 @@ class PlayerSpawn(Tile):
         return True
 
 
-# tile0.jpg
 class Void(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
@@ -48,91 +41,116 @@ class Void(Tile):
         return True
 
 
-# tile1.jpg
-class Dot(Tile):
+class HorizontalOutsideWall(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile3.jpg
-class BigDot(Tile):
+class VerticalOutsideWall(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile4.jpg
-class TopWall(Tile):
+class OutsideAngleTopRight(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile5.jpg
-class RightWall(Tile):
+class OutsideAngleBottomRight(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile6.jpg
-class BottomWall(Tile):
+class OutsideAngleBottomLeft(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile7.jpg
-class LeftWall(Tile):
+class OutsideAngleTopLeft(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile8.jpg
-class LeftTopShortTurn(Tile):
+class OutsideAngleTopLeft(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile9.jpg
-class RightTopShortTurn(Tile):
+class HorizontalWall(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile10.jpg
-class RightBottomShortTurn(Tile):
+class VerticalWall(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile11.jpg
-class LeftBottomShortTurn(Tile):
+class TopEnd(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile12.jpg
-class LeftTopLongTurn(Tile):
+class RightEnd(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile13.jpg
-class RightTopLongTurn(Tile):
+class BottomEnd(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile14.jpg
-class RightBottomLongTurn(Tile):
+class LeftEnd(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile15.jpg
-class LeftBottomLongTurn(Tile):
+class BigTopT(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
 
 
-# tile16.jpg
+class BigRightT(Tile):
+    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
+        super().__init__(position, size, image)
+
+
+class BigBottomT(Tile):
+    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
+        super().__init__(position, size, image)
+
+
+class BigLeftT(Tile):
+    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
+        super().__init__(position, size, image)
+
+
+class SmallTopT(Tile):
+    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
+        super().__init__(position, size, image)
+
+
+class SmallRightT(Tile):
+    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
+        super().__init__(position, size, image)
+
+
+class SmallLeftT(Tile):
+    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
+        super().__init__(position, size, image)
+
+
+class LeftTopTurn(Tile):
+    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
+        super().__init__(position, size, image)
+
+
+class RightTopTurn(Tile):
+    def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
+        super().__init__(position, size, image)
+
+
 class OneWay(Tile):
     def __init__(self, position: Tuple[int, int], size: Tuple[int, int], image: pygame.image):
         super().__init__(position, size, image)
