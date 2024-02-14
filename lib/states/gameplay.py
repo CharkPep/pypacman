@@ -26,6 +26,7 @@ class GameplayState(GameState):
         for entity in self.__entities:
             entity.render(self.__screen)
         self.__screen.blit(self.font.render(f"Score: {self.score}", True, (255, 255, 255)), (0, 0))
+        pygame.display.flip()
 
     def update(self):
         # for player in self.__players:

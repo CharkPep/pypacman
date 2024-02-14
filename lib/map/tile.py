@@ -9,20 +9,20 @@ class Tile:
         :param size: Size of rectangle
         :param image: Asset to be rendered on the rectangle
         """
-        self.__rect = pygame.Rect(position, size)
-        self.__image = image
+        self._rect = pygame.Rect(position, size)
+        self._image = image
 
     def render(self, surface: pygame.surface.Surface):
-        surface.blit(self.__image, self.__rect)
+        surface.blit(self._image, self._rect)
 
     def get_rect(self):
-        return self.__rect
+        return self._rect
 
     def passable(self):
         return False
 
     def collide(self, other: pygame.Rect):
-        return pygame.Rect.colliderect(self.__rect, other)
+        return pygame.Rect.colliderect(self._rect, other)
 
 
 class PlayerSpawn(Tile):

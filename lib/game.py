@@ -18,6 +18,7 @@ class Game:
             self.__state.handle_event(event)
 
     def render(self):
+        pygame.display.flip()
         self.__state.render()
 
 

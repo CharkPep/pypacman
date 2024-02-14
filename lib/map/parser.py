@@ -78,7 +78,7 @@ class DefaultMapParser(MapParser):
                 if game_map[i][j] is None:
                     continue
                 tile_code = game_map[i][j].__name__
-                rectangle_image = pygame.image.load(f"assets/mapTiles/tile{tile_code}.png")
+                rectangle_image = pygame.image.load(f"Assets/mapTiles/tile{tile_code}.png")
                 rectangle_image = pygame.transform.scale(rectangle_image, (int(size), int(size)))
                 game_map[i][j] = game_map[i][j]((first_rectangle_position[0] + size * j, first_rectangle_position[1] + size * i), (size, size), rectangle_image)
         return Map(game_map)
