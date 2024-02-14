@@ -23,6 +23,11 @@ class Map:
     def get_map(self) -> List[List[Tile]]:
         return self.__map
 
+    def get_tile_from_tuple(self, pos: Tuple[int, int]):
+        if pos[0] < 0 or pos[0] >= len(self.__map) or pos[1] < 0 or pos[1] >= len(self.__map[0]):
+            return None
+        return self.__map[pos[0]][pos[1]]
+
     def get_tile(self, x: int, y: int) -> Union[Tile, None]:
         if x < 0 or x >= len(self.__map) or y < 0 or y >= len(self.__map[0]):
             return None

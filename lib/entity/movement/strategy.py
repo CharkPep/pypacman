@@ -20,6 +20,6 @@ class MovementStrategy(ABC):
         pass
 
     @abstractmethod
-    def move(self):
+    def move(self, update: float):
         pass
 

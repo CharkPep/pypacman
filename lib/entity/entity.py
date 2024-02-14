@@ -5,7 +5,7 @@ import pygame
 class Entity(ABC):
 
     @abstractmethod
-    def update(self):
+    def update(self, dt: float):
         """
         Updates the entity, being called before rendering
         """
