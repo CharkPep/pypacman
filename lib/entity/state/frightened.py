@@ -1,5 +1,7 @@
-from .state import State
+from .state import EntityState
 
 
-class FrightenedState(State):
-    pass
+class FrightenedState(EntityState):
+
+    def __init__(self, map):
+        pass

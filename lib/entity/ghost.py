@@ -1,6 +1,9 @@
 from .entity import Entity
-from .movement import MovementStrategy
-from .state import machine, state
+from .state import manager, state as States
+from .movement.strategy import MovementStrategy
+from .movement.tileMovement import TileBasedMovement
+from ..map.map import Map
+from typing import Tuple
 import pygame
 
 
@@ -8,36 +11,23 @@ class Ghost(Entity):
 
     def __init__(self,
                  image: pygame.image,
-                 rect: pygame.rect.Rect,
-                 movement: MovementStrategy,
-                 playerMovement: MovementStrategy,
-                 state : machine.StateMachine,
+                 position: Tuple[int, int],
+                 map: Map,
+                 current_state: States.EntityState,
                  ):
-        """
-        :param image: assets
-        :param rect: MapObject where player is placed
-        """
-        self.state = "chase"
-        self.playerMovement = playerMovement
-        self.state = state
-        self.direction = []
-        self.movement = movement
-        self.next_move = None
-        self.__image = image
-        self.__rect = rect
+        self.__rect = pygame.rect.Rect(map.get_tile(position[0], position[1]).get_rect().topleft[0], map.get_tile(position[0], position[1]).get_rect().topleft[1], map.get_tile(0,0).get_rect().width, map.get_tile(0,0).get_rect().width)
+        self.movement: MovementStrategy = TileBasedMovement(map, self.__rect, position)
+        self.state: States.EntityState = current_state
+
+    def handle_event(self, event):
+        self.state.handle_event(event)
 
     def update(self):
-        self.direction = self.aiStrategy.moving_direction(self.movement.get_current_position(), self.playerMovement.get_current_position())
-        print(self.direction, self.movement.get_current_position())
-        if self.movement.move(self.__rect, -pygame.Vector2(pygame.Vector2(self.movement.get_current_position()[1] - self.direction[0][1], self.movement.get_current_position()[0] - self.direction[0][0]).normalize())):
-            self.next_move = None
-        else:
-            self.next_move = self.direction
-        return
+        self.state.update(self.movement)
+        self.movement.move()
 
     def render(self, surface: pygame.surface.Surface):
         pygame.draw.rect(surface, (0, 0, 0), self.__rect)
-        # surface.blit(self.__image, self.__rect)
 
     def get_rect(self):
         return self.__rect

@@ -10,6 +10,7 @@ class GameplayState(GameState):
     __map: Map = None
     __entities: List[Entity] = []
     __font: pygame.font.Font = None
+    __next_state = None
     score: int = 0
 
     def __init__(self, map: Map, screen: pygame.surface.Surface):
@@ -37,8 +38,10 @@ class GameplayState(GameState):
             entity.update()
 
     def handle_event(self, event):
-        for player in self.__entities:
-            player.handle_event(event)
+        for entity in self.__entities:
+            entity.handle_event(event)
 
-    def next(self, event):
+    def next(self):
+        if self.__next_state is not None:
+            return self.__next_state
         return

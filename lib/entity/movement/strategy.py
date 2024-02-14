@@ -3,7 +3,10 @@ import pygame
 
 
 class MovementStrategy(ABC):
-
+    """
+    Abstract class for the movement strategy of an entity
+    Responsible for handling the movement pattern of an entity
+    """
     @abstractmethod
     def get_current_position(self):
         pass

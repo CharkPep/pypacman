@@ -11,5 +11,5 @@ class GameState(ABC):
     def render(self):
         pass
 
-    def next(self, event):
+    def next(self) -> 'GameState':
         pass
