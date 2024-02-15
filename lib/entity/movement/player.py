@@ -1,14 +1,12 @@
-import time
-
 import pygame
 from .movement import MovementStrategy
 from ...map.map import Map
 from typing import Tuple
 import math
-from functools import cache  
+from functools import cache
+
 
 class PlayerMovement(MovementStrategy):
-    _target_tile: Tuple[int, int] = None
     _current_tile: Tuple[int, int] = None
     _map: Map = None
 
@@ -28,9 +26,9 @@ class PlayerMovement(MovementStrategy):
         self._change_direction = direction
 
     def get_direction(self) -> pygame.Vector2:
-        if self._change_direction is None:
-            return self._direction
-        return self._change_direction
+        # if self._change_direction is None:
+        return self._direction
+        # return self._change_direction
 
 
     @cache
