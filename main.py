@@ -13,7 +13,7 @@ app = argparse.ArgumentParser()
 
 app.add_argument("-w", "--width", default=400, help="width of the image")
 app.add_argument("-he", "--height", default=400, help="height of the image")
-app.add_argument('-l', '--level', default="./levels/small.txt", help="level file")
+app.add_argument('-l', '--level', default="./levels/original.txt", help="level file")
 
 args = vars(app.parse_args())
 screen_size = (int(args['width']), int(args['height']))
@@ -24,7 +24,13 @@ render = parser.DefaultMapParser("./levels/original.txt", screen)
 map = render.parse(screen_size)
 gameplay = GameplayState(map, screen)
 game = Game(gameplay)
-player = Player(None, (4, 4), map)
+images = {
+    'up': pygame.image.load('assets/pacman/pacman0.png'),
+    'down': pygame.image.load('./assets/pacman/pacman1.png'),
+    'left': pygame.image.load('./assets/pacman/pacman2.png'),
+    'right': pygame.image.load('assets/pacman/pacman3.png')
+}
+player = Player(images, (15, 8), map)
 gameplay.add_entity(player)
 chase = ChaseState(player.get_movement())
 ghost = Ghost(None, (1, 1), map, StateManager(map, chase, {chase: chase}))
