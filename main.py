@@ -28,8 +28,8 @@ gameplay = GameplayState(map, screen)
 game = Game(gameplay)
 images = {
     'up': pygame.image.load('assets/pacman/pacman0.png'),
-    'down': pygame.image.load('./assets/pacman/pacman1.png'),
-    'left': pygame.image.load('./assets/pacman/pacman2.png'),
+    'down': pygame.image.load('assets/pacman/pacman1.png'),
+    'left': pygame.image.load('assets/pacman/pacman2.png'),
     'right': pygame.image.load('assets/pacman/pacman3.png')
 }
 player = Player(images, (15, 8), map)
