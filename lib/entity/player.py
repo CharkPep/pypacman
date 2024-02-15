@@ -6,7 +6,7 @@ from .movement.player import PlayerMovement
 from ..map.map import Map
 
 
-class Player(Entity):
+class Player(Entity, pygame.sprite.Sprite):
 
     def __init__(self, image: pygame.image, position: Tuple[int ,int], map: Map):
         self.__rect = pygame.rect.Rect(map.get_tile(position[0], position[1]).get_rect().topleft[0], map.get_tile(position[0], position[1]).get_rect().topleft[1], map.get_tile(0,0).get_rect().width, map.get_tile(0,0).get_rect().width)
@@ -17,6 +17,7 @@ class Player(Entity):
         return self.movement
 
     def update(self, dt: float):
+        self.movement.update()
         self.movement.move(dt)
 
     def handle_event(self, event: pygame.event.Event):

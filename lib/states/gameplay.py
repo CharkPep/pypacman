@@ -32,6 +32,8 @@ class GameplayState(GameState):
             entity.update(dt)
 
     def handle_event(self, event):
+        if event.type == pygame.QUIT:
+            exit(0)
         for entity in self.__entities:
             entity.handle_event(event)
 

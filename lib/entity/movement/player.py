@@ -55,18 +55,26 @@ class PlayerMovement(MovementStrategy):
     def _is_passable_in_direction(self, direction: pygame.Vector2):
         return self._is_passable((int(self._current_tile[0] + direction.y), int(self._current_tile[1] + direction.x)))
 
-    def move(self, dt):
+    def _check_if_target_reached(self):
+        # Move from the current tile to the direction tile
         direction_tile = int(self._current_tile[0] + self._direction.y), int(self._current_tile[1] + self._direction.x)
-        if self._is_intersection(self._current_tile):
+        if math.dist(self._rect.center,
+                     self._get_tile(direction_tile).get_rect().center) <= self._velocity:
+            self._current_tile = direction_tile
+            self._rect.center = self._get_tile(self._current_tile).get_rect().center
+            return True
+        return False
+
+    def update(self):
+        # Change movement direction
+        self._check_if_target_reached()
+        if self._is_intersection(self._current_tile) and self._change_direction != self._direction:
             # Check if change direction is possible
             if self._change_direction is not None and self._is_passable_in_direction(self._change_direction):
                 self._direction = self._change_direction
                 self._rect.center = self._get_tile(self._current_tile).get_rect().center
                 self._change_direction = None
-            # Check if we can move in the current direction
-            if self._is_passable_in_direction(self._direction):
-                self._rect.move_ip(self._direction * self._velocity)
-        if math.dist(self._rect.center,
-                     self._get_tile(direction_tile).get_rect().center) <= self._velocity:
-            self._current_tile = direction_tile
-            self._rect.center = self._get_tile(self._current_tile).get_rect().center
+
+    def move(self, dt):
+        if self._is_passable_in_direction(self._direction):
+            self._rect.move_ip(self._direction * self._velocity)

@@ -15,37 +15,44 @@ class GhostMovement(PlayerMovement):
         super().__init__(map, entity, current_tile)
         self.states = current_state
         self.set_direction(-pygame.Vector2(0, 1))
+        self.__target_tile = self._current_tile
 
-    def __get_direction(self):
-        # 0B1000 - ENTITY IS NOT MOVING
-        # 0B0001 - CURRENT DIRECTION
-        # 0B0010 - RIGHT OF THE CURRENT DIRECTION
-        # 0B0100 - LEFT OF THE CURRENT DIRECTION
-        possible_directions = 0b0000
-        if self._direction == pygame.Vector2(0, 0):
-            return 0b1000
-        left = self._direction.rotate(90)
-        right = self._direction.rotate(-90)
-        straight = self._direction
+    def __get_possible_directions(self, movement_direction: pygame.Vector2):
+        left = movement_direction.rotate(90)
+        right = movement_direction.rotate(-90)
+        straight = movement_direction
+        if movement_direction == pygame.Vector2(0, 0):
+            left = pygame.Vector2(0, -1).rotate(90)
+            right = pygame.Vector2(0, -1).rotate(-90)
+            straight = pygame.Vector2(0, -1)
+        possible_directions = []
         if self._map.get_tile(int(self._current_tile[0] + straight.y), int(self._current_tile[1] + straight.x)).passable():
-            possible_directions |= 0b001
+            possible_directions.append(straight)
         if self._map.get_tile(int(self._current_tile[0] + right.y), int(self._current_tile[1] + right.x)).passable():
-            possible_directions |= 0b010
+            possible_directions.append(right)
         if self._map.get_tile(int(self._current_tile[0] + left.y), int(self._current_tile[1] + left.x)).passable():
-            possible_directions |= 0b100
+            possible_directions.append(left)
         return possible_directions
 
     def _calculate_distance_to_target_from_direction_vector(self, direction: pygame.Vector2):
-        target = self.states.get_current_state().get_target().get_current_position()
-        tile = self.get_current_position() + direction
-        return math.dist(target, tile)
+        target = self._map.get_tile_from_tuple(self.states.get_current_state().get_target().get_current_position())
+        tile = self._map.get_tile_from_tuple((int(self._current_tile[0] + direction[1]), int(self._current_tile[1] + direction[0])))
+        return math.dist(target.get_rect().center, tile.get_rect().center)
 
     @override
-    def move(self, dt: float):
-        possible_directions = self.__get_direction()
-        print(self._direction)
-        print("{0:b}".format(possible_directions))
-        if possible_directions == 0b0001:
-            super().move(dt)
-            return
-        super().move(dt)
+    def update(self):
+        if self._check_if_target_reached():
+            movement_direction = self._direction
+            if movement_direction == pygame.Vector2(0, 0):
+                movement_direction = pygame.Vector2(0, -1)
+            possible_directions = self.__get_possible_directions(movement_direction)
+            distance_to_target = self._calculate_distance_to_target_from_direction_vector(self._direction)
+            new_direction = None
+            for direction in possible_directions:
+                distance = self._calculate_distance_to_target_from_direction_vector(direction)
+                if distance <= distance_to_target:
+                    new_direction = direction
+                    distance_to_target = distance
+            if new_direction is None:
+                new_direction = possible_directions[0]
+            self._direction = new_direction

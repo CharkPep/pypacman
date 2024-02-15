@@ -24,6 +24,7 @@ class Ghost(Entity):
         self._state_manager.handle_event(event)
 
     def update(self, dt):
+        self.movement.update()
         self.movement.move(dt)
 
     def render(self, surface: pygame.surface.Surface):
