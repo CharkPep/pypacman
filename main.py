@@ -6,6 +6,8 @@ from lib.states.gameplay import GameplayState
 from lib.entity.player import Player
 from lib.entity.ghost import Ghost
 from lib.entity.state.manager import StateManager
+from lib.entity.state.scatter import ScatterState
+from lib.entity.state.eaten import EatenState
 from lib.entity.state.chase import ChaseState
 import pygame
 import argparse
@@ -27,6 +29,8 @@ game = Game(gameplay)
 player = Player(None, (4, 4), map)
 gameplay.add_entity(player)
 chase = ChaseState(player.get_movement())
+scatter = ScatterState((0, 0))
+eaten = EatenState(None, map)
 ghost = Ghost(None, (1, 1), map, StateManager(map, chase, {chase: chase}))
 gameplay.add_entity(ghost)
 pygame.display.set_caption("NPacman")

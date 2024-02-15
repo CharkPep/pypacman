@@ -1,18 +1,24 @@
 from .state import EntityState
 from ...map.map import Map
+from typing import Tuple
 import time
+
 
 class ScatterState(EntityState):
 
-    def __init__(self, map: Map):
-        self.__map = map
-        self.__timeout = time.clock() + 20
+    def __init__(self, corner: Tuple[int, int]):
+        self._target = corner
 
     def handle_event(self, event):
         pass
 
     def next(self):
-        # if self.__timeout < time.clock():
-        #     return States.CHASE
         return None
+
+    def update(self, target):
+        pass
+
+    def get_target(self):
+        return self._target
+
 
