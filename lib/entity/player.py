@@ -34,6 +34,8 @@ class Player(Entity):
         pygame.draw.rect(surface, (255, 0, 0), self.__rect)
         pygame.draw.line(surface, (0, 255, 0), self.__rect.center, self.__rect.center + self.movement.get_direction() * 20)
 
+
+
     def get_rect(self):
         return self.__rect
 

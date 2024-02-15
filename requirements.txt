@@ -1,3 +1,2 @@
-pygame~=2.5.0
-pytest~=8.0.0
-type-extensions
+pygame==2.5.0
+typing_extensions==4.9.0
