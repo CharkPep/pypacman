@@ -1,9 +1,12 @@
 import time
 
-from lib.map import map, parser, tile
+from lib.map import parser
 from lib.game import Game
 from lib.states.gameplay import GameplayState
 from lib.entity.player import Player
+from lib.entity.ghost import Ghost
+from lib.entity.state.manager import StateManager
+from lib.entity.state.chase import ChaseState
 import pygame
 import argparse
 app = argparse.ArgumentParser()
@@ -23,6 +26,9 @@ gameplay = GameplayState(map, screen)
 game = Game(gameplay)
 player = Player(None, (4, 4), map)
 gameplay.add_entity(player)
+chase = ChaseState(player.get_movement())
+ghost = Ghost(None, (1, 1), map, StateManager(map, chase, {chase: chase}))
+gameplay.add_entity(ghost)
 pygame.display.set_caption("NPacman")
 running = True
 clock = pygame.time.Clock()

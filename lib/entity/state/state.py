@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Union
-from ..movement.strategy import MovementStrategy
+from ..movement.movement import MovementStrategy
 
 class EntityState(ABC):
     """
@@ -12,7 +12,11 @@ class EntityState(ABC):
         pass
 
     @abstractmethod
-    def update(self, entity: MovementStrategy):
+    def get_target(self) -> MovementStrategy:
+        pass
+
+    @abstractmethod
+    def update(self, target: MovementStrategy):
         pass
 
     @abstractmethod

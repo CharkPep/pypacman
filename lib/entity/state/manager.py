@@ -1,31 +1,13 @@
 from ...map.map import Map
 from .state import EntityState
-from .chase import ChaseState
-from .frightened import FrightenedState
-from .eaten import EatenState
-from .scatter import ScatterState
-from enum import Enum
-
-
-class States(Enum):
-    CHASE = ChaseState
-    SCATTER = ScatterState
-    FRIGHTENED = FrightenedState
-    EATEN = EatenState
 
 
 class StateManager:
     _instance = None
 
-    def __init__(self, map: Map):
+    def __init__(self, map: Map, initial_state: EntityState, states: dict[EntityState, EntityState]):
         self.__map = map
-        self.__states = {
-            ChaseState: ChaseState(map),
-            # ScatterState: ScatterState(map)
-            # EatenState: EatenState(map),
-            # FrightenedState: FrightenedState(map)
-        }
-        self.current_state = States.CHASE
+        self._current_state = initial_state
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -33,7 +15,7 @@ class StateManager:
         return cls._instance
 
     def handle_event(self, event):
-        
+        pass
 
-    def get_state(self, state: States):
-        return self.__states[state.value]
+    def get_current_state(self) -> EntityState:
+        return self._current_state

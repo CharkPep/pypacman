@@ -1,14 +1,19 @@
-import math
 from .state import EntityState
-from ..movement.strategy import MovementStrategy
+from ..movement.movement import MovementStrategy
 from ...map.map import Map
-import time
+from typing import Tuple
 
 
 class ChaseState(EntityState):
 
-    def __init__(self, map: Map):
-        self.__map = map
+    def __init__(self, target: MovementStrategy):
+        self._target = target
+
+    def get_target(self) -> MovementStrategy:
+        return self._target
+
+    def update(self, target: MovementStrategy):
+        pass
 
     def handle_event(self, event):
         pass
@@ -16,7 +21,4 @@ class ChaseState(EntityState):
         #     self.next_state = States.SCATTER
 
     def next(self):
-        pass
-
-    def update(self, entity: MovementStrategy):
         pass
