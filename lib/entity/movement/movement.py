@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import pygame
+from typing import Tuple
 
 
 class MovementStrategy(ABC):
@@ -8,15 +9,18 @@ class MovementStrategy(ABC):
     Responsible for handling the movement pattern of an entity
     """
     @abstractmethod
-    def get_current_position(self):
+    def get_current_position(self) -> Tuple[int, int]:
         pass
 
     @abstractmethod
-    def set_speed(self, speed: pygame.Vector2):
+    def set_direction(self, direction: pygame.Vector2):
         pass
 
     @abstractmethod
-    def get_speed(self) -> pygame.Vector2:
+    def get_direction(self) -> pygame.Vector2:
+        pass
+
+    def update(self):
         pass
 
     @abstractmethod

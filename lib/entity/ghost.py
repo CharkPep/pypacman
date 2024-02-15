@@ -1,7 +1,7 @@
 from .entity import Entity
 from .state import manager, state as States
-from .movement.strategy import MovementStrategy
-from .movement.tile_movement import TileBasedMovement
+from .movement.movement import MovementStrategy
+from .movement.ghost import GhostMovement
 from ..map.map import Map
 from typing import Tuple
 import pygame
@@ -13,24 +13,27 @@ class Ghost(Entity):
                  image: pygame.image,
                  position: Tuple[int, int],
                  map: Map,
-                 state: manager.StateManager,
+                 state_manager: manager.StateManager,
                  ):
-        self.__rect = pygame.rect.Rect(map.get_tile(position[0], position[1]).get_rect().topleft[0], map.get_tile(position[0], position[1]).get_rect().topleft[1], map.get_tile(0,0).get_rect().width, map.get_tile(0,0).get_rect().width)
-        self.movement: MovementStrategy = TileBasedMovement(map, self.__rect, position)
-        self.state: manager.StateManager = state
+        self._image = image
+        self._rect = pygame.rect.Rect(map.get_tile(position[0], position[1]).get_rect().topleft[0], map.get_tile(position[0], position[1]).get_rect().topleft[1], map.get_tile(0, 0).get_rect().width, map.get_tile(0, 0).get_rect().width)
+        self.movement: MovementStrategy = GhostMovement(state_manager, map, self._rect, position)
+        self._state_manager: manager.StateManager = state_manager
 
     def handle_event(self, event):
-        self.state.handle_event(event)
+        self._state_manager.handle_event(event)
 
-    def update(self):
-        self.state.update(self.movement)
-        self.movement.move()
+    def update(self, dt):
+        self.movement.update()
+        self.movement.move(dt)
 
     def render(self, surface: pygame.surface.Surface):
-        pygame.draw.rect(surface, (0, 0, 0), self.__rect)
+        # surface.blit(self._image, self._rect.topleft)
+        pygame.draw.rect(surface, (255, 0, 0), self._rect)
+        pygame.draw.line(surface, (0, 255, 0), self._rect.center, self._rect.center + self.movement.get_direction() * 20)
 
     def get_rect(self):
-        return self.__rect
+        return self._rect
 
     def collide(self, other: pygame.rect.Rect):
-        return pygame.Rect.colliderect(self.__rect, other)
+        return pygame.Rect.colliderect(self._rect, other)
