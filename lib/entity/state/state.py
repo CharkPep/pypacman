@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Union
 from ..movement.movement import MovementStrategy
+from typing import Tuple
 
 class EntityState(ABC):
     """
@@ -12,11 +13,7 @@ class EntityState(ABC):
         pass
 
     @abstractmethod
-    def get_target(self) -> MovementStrategy:
-        pass
-
-    @abstractmethod
-    def update(self, target: MovementStrategy):
+    def get_target(self) -> Tuple[int, int]:
         pass
 
     @abstractmethod

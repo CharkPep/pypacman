@@ -9,11 +9,8 @@ class ChaseState(EntityState):
     def __init__(self, target: MovementStrategy):
         self._target = target
 
-    def get_target(self) -> MovementStrategy:
-        return self._target
-
-    def update(self, target: MovementStrategy):
-        pass
+    def get_target(self) -> Tuple[int, int]:
+        return self._target.get_current_position()
 
     def handle_event(self, event):
         pass

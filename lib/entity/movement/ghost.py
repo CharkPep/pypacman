@@ -35,24 +35,29 @@ class GhostMovement(PlayerMovement):
         return possible_directions
 
     def _calculate_distance_to_target_from_direction_vector(self, direction: pygame.Vector2):
-        target = self._map.get_tile_from_tuple(self.states.get_current_state().get_target().get_current_position())
+        target = self._map.get_tile_from_tuple(self.states.get_current_state().get_target())
         tile = self._map.get_tile_from_tuple((int(self._current_tile[0] + direction[1]), int(self._current_tile[1] + direction[0])))
         return math.dist(target.get_rect().center, tile.get_rect().center)
+
+    def _select_best_direction(self):
+        movement_direction = self._direction
+        if movement_direction == pygame.Vector2(0, 0):
+            movement_direction = pygame.Vector2(0, -1)
+        possible_directions = self.__get_possible_directions(movement_direction)
+        distance_to_target = self._calculate_distance_to_target_from_direction_vector(self._direction)
+        new_direction = None
+        if new_direction is None and len(possible_directions) > 0:
+            new_direction = possible_directions[0]
+        if new_direction is None:
+            new_direction = -movement_direction
+        for direction in possible_directions:
+            distance = self._calculate_distance_to_target_from_direction_vector(direction)
+            if distance <= distance_to_target:
+                new_direction = direction
+                distance_to_target = distance
+        return new_direction
 
     @override
     def update(self):
         if self._check_if_target_reached():
-            movement_direction = self._direction
-            if movement_direction == pygame.Vector2(0, 0):
-                movement_direction = pygame.Vector2(0, -1)
-            possible_directions = self.__get_possible_directions(movement_direction)
-            distance_to_target = self._calculate_distance_to_target_from_direction_vector(self._direction)
-            new_direction = None
-            for direction in possible_directions:
-                distance = self._calculate_distance_to_target_from_direction_vector(direction)
-                if distance <= distance_to_target:
-                    new_direction = direction
-                    distance_to_target = distance
-            if new_direction is None:
-                new_direction = possible_directions[0]
-            self._direction = new_direction
+            self._direction = self._select_best_direction()
