@@ -2,7 +2,6 @@ from ..state import GameState
 from typing import List, Tuple
 from ..entity.entity import Entity
 from ..map.map import Map
-from ..entity.player import Player
 import pygame
 
 

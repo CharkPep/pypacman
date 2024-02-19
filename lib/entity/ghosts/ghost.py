@@ -1,6 +1,7 @@
 from .entity import Entity
 from .state import manager, state as States
 from .movement.movement import MovementStrategy
+from .movement.frighten import FrightenedMovement
 from .movement.ghost import GhostMovement
 from ..map.map import Map
 from typing import Tuple
@@ -10,22 +11,21 @@ import pygame
 class Ghost(Entity):
 
     def __init__(self,
-                 image: pygame.image,
-                 position: Tuple[int, int],
-                 map: Map,
-                 state_manager: manager.StateManager,
+             image: pygame.image,
+             position: Tuple[int, int],
+             map: Map,
+             state_manager: manager.StateManager,
                  ):
         self._image = image
         self._rect = pygame.rect.Rect(map.get_tile(position[0], position[1]).get_rect().topleft[0], map.get_tile(position[0], position[1]).get_rect().topleft[1], map.get_tile(0, 0).get_rect().width, map.get_tile(0, 0).get_rect().width)
-        self.movement: MovementStrategy = GhostMovement(state_manager, map, self._rect, position)
         self._state_manager: manager.StateManager = state_manager
 
     def handle_event(self, event):
         self._state_manager.handle_event(event)
 
     def update(self, dt):
-        self.movement.update()
-        self.movement.move(dt)
+        self._state_manager.get_movement().update()
+        self._state_manager.get_movement().move(dt)
 
     def render(self, surface: pygame.surface.Surface):
         # surface.blit(self._image, self._rect.topleft)

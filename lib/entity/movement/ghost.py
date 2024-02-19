@@ -1,23 +1,22 @@
 import math
 
-from .player import PlayerMovement
+from .basic import BasicMovement
 from ..state.state import EntityState
 from ...map.map import Map
 import pygame
 from typing import Tuple, Union
 from typing_extensions import override
-from ..state.manager import StateManager
 
 
-class GhostMovement(PlayerMovement):
+class GhostMovement(BasicMovement):
 
-    def __init__(self, current_state: StateManager, map: Map, entity: pygame.rect.Rect, current_tile: Tuple[int, int]):
-        super().__init__(map, entity, current_tile)
-        self.states = current_state
+    def __init__(self, target: BasicMovement, map: Map, entity: pygame.rect.Rect, spawn: Tuple[int, int]):
+        super().__init__(map, entity, spawn)
         self.set_direction(-pygame.Vector2(0, 1))
+        self._target = target
         self.__target_tile = self._current_tile
 
-    def __get_possible_directions(self, movement_direction: pygame.Vector2):
+    def _get_possible_directions(self, movement_direction: pygame.Vector2):
         left = movement_direction.rotate(90)
         right = movement_direction.rotate(-90)
         straight = movement_direction
@@ -35,7 +34,7 @@ class GhostMovement(PlayerMovement):
         return possible_directions
 
     def _calculate_distance_to_target_from_direction_vector(self, direction: pygame.Vector2):
-        target = self._map.get_tile_from_tuple(self.states.get_current_state().get_target())
+        target = self._map.get_tile_from_tuple(self._target.get_current_position())
         tile = self._map.get_tile_from_tuple((int(self._current_tile[0] + direction[1]), int(self._current_tile[1] + direction[0])))
         return math.dist(target.get_rect().center, tile.get_rect().center)
 
@@ -43,7 +42,7 @@ class GhostMovement(PlayerMovement):
         movement_direction = self._direction
         if movement_direction == pygame.Vector2(0, 0):
             movement_direction = pygame.Vector2(0, -1)
-        possible_directions = self.__get_possible_directions(movement_direction)
+        possible_directions = self._get_possible_directions(movement_direction)
         distance_to_target = self._calculate_distance_to_target_from_direction_vector(self._direction)
         new_direction = None
         if new_direction is None and len(possible_directions) > 0:

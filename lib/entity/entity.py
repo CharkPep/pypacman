@@ -20,7 +20,7 @@ class Entity(ABC):
         pass
 
     @abstractmethod
-    def handle_event(self, event):
+    def handle_event(self, event: pygame.event.Event):
         """
         Handles the event
         :param event: Event to handle

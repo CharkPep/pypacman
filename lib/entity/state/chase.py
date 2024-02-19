@@ -1,5 +1,7 @@
 from .state import EntityState
 from ..movement.movement import MovementStrategy
+from .scatter import ScatterState
+from .frightened import FrightenedState
 from ...map.map import Map
 from typing import Tuple
 
@@ -13,9 +15,8 @@ class ChaseState(EntityState):
         return self._target.get_current_position()
 
     def handle_event(self, event):
-        pass
-        # if event == "PACMAN_BOOSTED":
-        #     self.next_state = States.SCATTER
+        if event == "PACMAN_BOOSTED":
+            self.next_state = FrightenedState
 
     def next(self):
         pass

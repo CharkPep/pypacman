@@ -2,7 +2,7 @@ from .entity import Entity
 import pygame
 from typing import Tuple
 from .movement.movement import MovementStrategy
-from .movement.player import PlayerMovement
+from .movement.basic import BasicMovement
 from ..map.map import Map
 
 
@@ -10,7 +10,7 @@ class Player(Entity, pygame.sprite.Sprite):
 
     def __init__(self, images: dict, position: Tuple[int, int], map: Map):
         self.__rect = pygame.rect.Rect(map.get_tile(position[0], position[1]).get_rect().topleft[0], map.get_tile(position[0], position[1]).get_rect().topleft[1], map.get_tile(0,0).get_rect().width, map.get_tile(0,0).get_rect().width)
-        self.movement: MovementStrategy = PlayerMovement(map, self.__rect, position)
+        self.movement: MovementStrategy = BasicMovement(map, self.__rect, position)
         self.__image_dict = self.resize_images(images, map.get_tile(0, 0).get_rect().width,
                                                map.get_tile(0, 0).get_rect().height)
         self.__image = self.__image_dict['right']

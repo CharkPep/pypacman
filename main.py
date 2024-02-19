@@ -3,14 +3,11 @@ import time
 from lib.map import parser
 from lib.game import Game
 from lib.states.gameplay import GameplayState
-from lib.entity.player import Player
-from lib.entity.ghost import Ghost
-from lib.entity.state.manager import StateManager
-from lib.entity.state.scatter import ScatterState
-from lib.entity.state.eaten import EatenState
-from lib.entity.state.chase import ChaseState
 import pygame
 import argparse
+
+FPS = 60
+TARGET_FPS = 60
 app = argparse.ArgumentParser()
 
 app.add_argument("-w", "--width", default=400, help="width of the image")
@@ -32,20 +29,13 @@ images = {
     'left': pygame.image.load('assets/pacman/pacman2.png'),
     'right': pygame.image.load('assets/pacman/pacman3.png')
 }
-player = Player(images, (15, 8), map)
-gameplay.add_entity(player)
-chase = ChaseState(player.get_movement())
-scatter = ScatterState((0, 0))
-eaten = EatenState(None, map)
-ghost = Ghost(None, (1, 1), map, StateManager(map, chase, {chase: chase}))
-gameplay.add_entity(ghost)
+# player = Player(images, (15, 8), map)
+# gameplay.add_entity(player)
 pygame.display.set_caption("NPacman")
 running = True
 clock = pygame.time.Clock()
 current_time = time.time()
 prev_time = current_time
-FPS = 60
-TARGET_FPS = 60
 while running:
     current_time = time.time()
     game.handle_events(pygame.event.get())

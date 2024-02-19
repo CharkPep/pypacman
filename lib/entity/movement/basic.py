@@ -1,12 +1,11 @@
 import pygame
-from .movement import MovementStrategy
 from ...map.map import Map
 from typing import Tuple
 import math
 from functools import cache
 
 
-class PlayerMovement(MovementStrategy):
+class BasicMovement:
     _current_tile: Tuple[int, int] = None
     _map: Map = None
 
