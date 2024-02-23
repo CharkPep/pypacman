@@ -2,7 +2,10 @@ import time
 
 from lib.map import parser
 from lib.game import Game
-from lib.states.gameplay import GameplayState
+from lib.stages.gameplay import GameplayStage
+from lib.entity.players.pacman import Pacman
+from lib.entity.ghosts.clyde import Clyde
+from lib.map.map import GameMap
 import pygame
 import argparse
 
@@ -20,8 +23,8 @@ screen_size = (int(args['width']), int(args['height']))
 pygame.init()
 screen = pygame.display.set_mode(screen_size)
 render = parser.DefaultMapParser("./levels/original.txt", screen)
-map = render.parse(screen_size)
-gameplay = GameplayState(map, screen)
+render.parse(screen_size)
+gameplay = GameplayStage(screen)
 game = Game(gameplay)
 images = {
     'up': pygame.image.load('assets/pacman/pacman0.png'),
@@ -29,18 +32,20 @@ images = {
     'left': pygame.image.load('assets/pacman/pacman2.png'),
     'right': pygame.image.load('assets/pacman/pacman3.png')
 }
-# player = Player(images, (15, 8), map)
-# gameplay.add_entity(player)
+player = Pacman()
+gameplay.add_entity(player)
+clyde = Clyde((11, 10), player)
+gameplay.add_entity(clyde)
 pygame.display.set_caption("NPacman")
 running = True
-clock = pygame.time.Clock()
 current_time = time.time()
 prev_time = current_time
+frame = 0
 while running:
     current_time = time.time()
     game.handle_events(pygame.event.get())
-    game.update(current_time - prev_time)
+    dt = current_time - prev_time
+    game.update(dt)
     prev_time = current_time
     game.render()
-    clock.tick(FPS)
     pygame.display.flip()

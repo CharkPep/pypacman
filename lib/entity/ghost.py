@@ -1,20 +1,18 @@
-import math
-
-from .basic import BasicMovement
-from ..state.state import EntityState
-from ...map.map import Map
+from typing import Tuple
+from abc import abstractmethod, ABC
+from .entity import Entity
+from lib.map.map import GameMap
 import pygame
-from typing import Tuple, Union
-from typing_extensions import override
 
 
-class GhostMovement(BasicMovement):
+class Ghost(Entity, ABC):
 
-    def __init__(self, target: BasicMovement, map: Map, entity: pygame.rect.Rect, spawn: Tuple[int, int]):
-        super().__init__(map, entity, spawn)
-        self.set_direction(-pygame.Vector2(0, 1))
-        self._target = target
-        self.__target_tile = self._current_tile
+    def __init__(
+            self,
+            position: Tuple[int, int],
+            velocity: int,
+    ):
+        super().__init__(position, velocity)
 
     def _get_possible_directions(self, movement_direction: pygame.Vector2):
         left = movement_direction.rotate(90)
@@ -25,18 +23,19 @@ class GhostMovement(BasicMovement):
             right = pygame.Vector2(0, -1).rotate(-90)
             straight = pygame.Vector2(0, -1)
         possible_directions = []
-        if self._map.get_tile(int(self._current_tile[0] + straight.y), int(self._current_tile[1] + straight.x)).passable():
+        if GameMap.get_instance().is_passable((int(self._position[0] + straight.y),
+                                               int(self._position[1] + straight.x))):
             possible_directions.append(straight)
-        if self._map.get_tile(int(self._current_tile[0] + right.y), int(self._current_tile[1] + right.x)).passable():
+        if GameMap.get_instance().is_passable((int(self._position[0] + right.y),
+                                               int(self._position[1] + right.x))):
             possible_directions.append(right)
-        if self._map.get_tile(int(self._current_tile[0] + left.y), int(self._current_tile[1] + left.x)).passable():
+        if GameMap.get_instance().is_passable((int(self._position[0] + left.y), int(self._position[1] + left.x))):
             possible_directions.append(left)
         return possible_directions
 
-    def _calculate_distance_to_target_from_direction_vector(self, direction: pygame.Vector2):
-        target = self._map.get_tile_from_tuple(self._target.get_current_position())
-        tile = self._map.get_tile_from_tuple((int(self._current_tile[0] + direction[1]), int(self._current_tile[1] + direction[0])))
-        return math.dist(target.get_rect().center, tile.get_rect().center)
+    def update(self, dt: float):
+        self._update_direction()
+        super().update(dt)
 
     def _select_best_direction(self):
         movement_direction = self._direction
@@ -56,7 +55,25 @@ class GhostMovement(BasicMovement):
                 distance_to_target = distance
         return new_direction
 
-    @override
-    def update(self):
-        if self._check_if_target_reached():
-            self._direction = self._select_best_direction()
+    @abstractmethod
+    def _calculate_distance_to_target_from_direction_vector(self, direction: pygame.Vector2) -> float:
+        """
+        Calculates the distance to the target from the direction vector, the implementation depends on the ghost, 
+        so different ghosts can have different targets
+        :returns: float
+        """
+        pass
+
+    @abstractmethod
+    def set_state(self, state):
+        """
+        Changes the state of the ghost
+        """
+        pass
+
+    @abstractmethod
+    def _update_direction(self):
+        """
+        Updates the movement direction of a ghost
+        """
+        pass

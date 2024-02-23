@@ -1,4 +1,5 @@
-from ..state import GameState
+from ..stage import GameStage
+
 
 class TitleState:
 
