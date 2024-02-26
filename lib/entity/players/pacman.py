@@ -4,7 +4,7 @@ from lib.entity.entity import Entity
 
 class Pacman(Entity):
     # TODO - Add dynamic spawn position depending on map
-    SPAWN_POSITION = (1, 1)
+    SPAWN_POSITION = pygame.Vector2(1, 1)
 
     def __init__(self):
         super().__init__(self.SPAWN_POSITION, 11)

@@ -156,4 +156,4 @@ class OneWay(Tile):
         super().__init__(position, size, image)
 
     def passable(self):
-        return True
+        return False

@@ -1,61 +1,80 @@
 from typing import List, Union, Tuple, Dict
-
+from lib.map.tile import OneWay
 import pygame.surface
 from .tile import Tile
 
 
 class GameMap:
     _map: List[List[Tile]] = None
-    __score = []
-    __boosts = []
-    _size = None
+    _player_spawn = None
+    _score = []
+    _boosts = []
+    _ghost_spawn_tiles = []
+    _curr_ghost_spawn_tile = -1
     _instance = None
+    _ghost_house_exit_tile = None
 
     @classmethod
-    def get_instance(cls, *args) -> 'GameMap':
+    def get_instance(cls, *args, **kwargs) -> 'GameMap':
         if cls._instance is None:
-            cls._instance = cls(*args)
+            cls._instance = cls(*args, **kwargs)
         return cls._instance
 
-    def get_size(self):
-        return self._size
+    def get_next_ghost_house_tile(self):
+        self._curr_ghost_spawn_tile = (self._curr_ghost_spawn_tile + 1) % len(self._ghost_spawn_tiles)
+        return pygame.Vector2(self._ghost_spawn_tiles[self._curr_ghost_spawn_tile])
 
-    def is_intersection(self, tile: Tuple[int, int]):
-        top = self.is_passable((tile[0], tile[1]))
-        left = self.is_passable((tile[0], tile[1] - 1))
-        right = self.is_passable((tile[0], tile[1] + 1))
-        bottom = self.is_passable((tile[0] + 1, tile[1]))
+    def get_ghost_house_exit(self):
+        return self._ghost_house_exit_tile
+
+    def is_intersection(self, tile: pygame.Vector2):
+        top = self.is_passable(tile)
+        left = self.is_passable(pygame.Vector2(tile[0] - 1, tile[1]))
+        right = self.is_passable(pygame.Vector2(tile[0] + 1, tile[1]))
+        bottom = self.is_passable(pygame.Vector2(tile[0], tile[1] + 1))
         return top + left + right + bottom >= 2
 
-    def is_passable(self, tile: Tuple[int, int]) -> bool:
-        tile = self.get_tile_from_tuple(tile)
+    def is_passable(self, tile: pygame.Vector2) -> bool:
+        tile = self.get_tile(tile)
         if tile is None:
             return False
         return tile.passable()
 
     def get_tile_size(self):
-        return self._size
+        return self._map[0][0].get_rect().width, self._map[0][0].get_rect().height
 
-    def __init__(self, map: List[List[Tile]]):
-        self._map = map
-        self._size = (map[0][0].get_rect().width, map[0][0].get_rect().height)
+    def __init__(self, tiles: List[List[Tile]], ghost_house: List[pygame.Vector2], ghost_house_exit: pygame.Vector2,
+                 background: pygame.image = None, **metadate):
+        self._map = tiles
+        self._ghost_spawn_tiles = ghost_house
+        self._ghost_house_exit_tile = ghost_house_exit
+        self._background = background
+        self._metadate = metadate
+
+    def get_metadate(self):
+        return self._metadate
 
     def render(self, surface: pygame.surface.Surface):
-        surface.fill((0, 0, 0))
+        if self._background is not None:
+            surface.blit(self._background, (0, 0))
+        else:
+            surface.fill((0, 0, 0))
         for layer in self._map:
             for tile in layer:
-                if tile is not None:
-                    tile.render(surface)
+                tile.render(surface)
 
     def get_map(self) -> List[List[Tile]]:
         return self._map
 
-    def get_tile_from_tuple(self, pos: Tuple[int, int]):
-        if pos[0] < 0 or pos[0] >= len(self._map) or pos[1] < 0 or pos[1] >= len(self._map[0]):
-            return None
-        return self._map[pos[0]][pos[1]]
+    def clamp(self, value, min_value, max_value):
+        return max(min_value, min(value, max_value))
 
-    def get_tile(self, x: int, y: int) -> Union[Tile, None]:
-        if x < 0 or x >= len(self._map) or y < 0 or y >= len(self._map[0]):
-            return None
-        return self._map[x][y]
+    def clamp_position(self, position: pygame.Vector2):
+        return pygame.Vector2(self.clamp(position.x, 0, len(self._map[0]) - 1),
+                              self.clamp(position.y, 0, len(self._map) - 1))
+
+    def get_tile(self, position: pygame.Vector2) -> Tile:
+        if position.y < 0 or position.y >= len(self._map) or position.x < 0 or position.x >= len(self._map[0]):
+            position = self.clamp_position(position)
+            return self._map[int(position.y)][int(position.x)]
+        return self._map[int(position.y)][int(position.x)]
