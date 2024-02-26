@@ -6,3 +6,5 @@ class GhostStates(Enum):
     FRIGHTENED = "FRIGHTENED"
     IDLE = "IDLE"
     CHASE = "CHASE"
+    EXITING_HOUSE = "EXITING_HOUSE"
+    DEAD = "DEAD"

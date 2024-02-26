@@ -1,3 +1,4 @@
+import json
 import os.path
 from abc import ABC, abstractmethod
 from .map import GameMap
@@ -57,24 +58,25 @@ class DefaultMapParser(MapParser):
         lines = 0
         columns = 0
         game_map = []
-        with open(self.__file, "r") as file:
-            for line in file:
-                lines += 1
-                layer = []
-                current_column_count = 0
-                for tile in line:
-                    current_column_count += 1
-                    if tile == "\n":
-                        break
-                    layer.append(codes[tile])
-                game_map.append(layer)
-                if current_column_count > columns:
-                    columns = current_column_count
+        data = json.load(open(self.__file, "r"))
+        for line in data["map"]:
+            lines += 1
+            layer = []
+            current_column_count = 0
+            for tile in line:
+                current_column_count += 1
+                if tile == "\n":
+                    break
+                layer.append(codes[tile])
+            game_map.append(layer)
+            if current_column_count > columns:
+                columns = current_column_count
         columns -= 1
         size = min(screen_size[0] / columns, screen_size[1] / lines)
         if size == 0:
             raise ValueError("The map is too big for the screen")
         first_rectangle_position = (screen_size[0] - columns * size) / 2., (screen_size[1] - lines * size) / 2.
+        ghost_house_exit = None
         for i in range(len(game_map)):
             for j in range(len(game_map[i])):
                 if game_map[i][j] is None:
@@ -85,4 +87,7 @@ class DefaultMapParser(MapParser):
                 game_map[i][j] = game_map[i][j](
                     (first_rectangle_position[0] + size * j, first_rectangle_position[1] + size * i), (size, size),
                     rectangle_image)
-        return GameMap.get_instance(game_map)
+                if isinstance(game_map[i][j], OneWay):
+                    ghost_house_exit = pygame.Vector2(j, i)
+        return GameMap.get_instance(game_map, data["ghost_house"], ghost_house_exit,
+                                    chase_duration=data["chase_duration"], scatter_duration=data["scatter_duration"])

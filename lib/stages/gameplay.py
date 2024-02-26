@@ -1,7 +1,10 @@
-from ..stage import GameStage
+from lib.stage import GameStage
 from typing import List, Tuple
-from ..entity.object import GameObject
-from ..map.map import GameMap
+from lib.managers.ghost_manager import GhostManager
+from lib.entity.players.pacman import Pacman
+from lib.entity.object import GameObject
+from lib.map.map import GameMap
+from lib.enums.game_events import STATE_HANDLER_NOT_IMPLEMENTED, GAME_OVER, NEXT_LEVEL
 import pygame
 
 
@@ -15,11 +18,17 @@ class GameplayStage(GameStage):
     def __init__(self, screen: pygame.surface.Surface):
         self._map = GameMap.get_instance()
         self.__screen = screen
+        player = Pacman()
+        self.add_entity(player)
+        self._ghost_manager = GhostManager(self)
         self._clock = pygame.time.Clock()
         self._font = pygame.font.SysFont('Comic Sans MS', 30)
 
-    def add_entity(self, entity: GameObject):
-        self._entities.append(entity)
+    def add_entity(self, *entities: GameObject):
+        self._entities.extend([*entities])
+
+    def get_entities(self):
+        return self._entities
 
     @classmethod
     def get_target_fps(cls):
@@ -39,6 +48,11 @@ class GameplayStage(GameStage):
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             exit(0)
+        if event.type == STATE_HANDLER_NOT_IMPLEMENTED:
+            print("State Handler not implemented", event.message)
+        if event.type == NEXT_LEVEL:
+            self._ghost_manager.next_level()
+
         for entity in self._entities:
             entity.handle_event(event)
 
