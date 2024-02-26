@@ -1,6 +1,6 @@
 import os.path
 from abc import ABC, abstractmethod
-from .map import Map
+from .map import GameMap
 from .tile import *
 from typing import Tuple
 import pygame
@@ -10,8 +10,9 @@ class MapParser(ABC):
     """
     Abstract class for a map parser
     """
+
     @abstractmethod
-    def parse(self, screen: Tuple[int, int]) -> Map:
+    def parse(self, screen: Tuple[int, int]) -> GameMap:
         pass
 
 
@@ -42,6 +43,7 @@ codes = {
     "n": RightTopTurn,
 }
 
+
 class DefaultMapParser(MapParser):
     __file = ""
 
@@ -51,7 +53,7 @@ class DefaultMapParser(MapParser):
         self.__file = os.path.abspath(file)
         self.__surface = surface
 
-    def parse(self, screen_size) -> Map:
+    def parse(self, screen_size) -> GameMap:
         lines = 0
         columns = 0
         game_map = []
@@ -78,7 +80,9 @@ class DefaultMapParser(MapParser):
                 if game_map[i][j] is None:
                     continue
                 tile_code = game_map[i][j].__name__
-                rectangle_image = pygame.image.load(f"Assets/mapTiles/tile{tile_code}.png")
+                rectangle_image = pygame.image.load(f"assets/mapTiles/tile{tile_code}.png")
                 rectangle_image = pygame.transform.scale(rectangle_image, (int(size), int(size)))
-                game_map[i][j] = game_map[i][j]((first_rectangle_position[0] + size * j, first_rectangle_position[1] + size * i), (size, size), rectangle_image)
-        return Map(game_map)
+                game_map[i][j] = game_map[i][j](
+                    (first_rectangle_position[0] + size * j, first_rectangle_position[1] + size * i), (size, size),
+                    rectangle_image)
+        return GameMap.get_instance(game_map)

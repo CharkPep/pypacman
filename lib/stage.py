@@ -1,7 +1,7 @@
 from abc import ABC
 
 
-class GameState(ABC):
+class GameStage(ABC):
     def handle_event(self, event):
         pass
 
@@ -11,5 +11,5 @@ class GameState(ABC):
     def render(self):
         pass
 
-    def next(self) -> 'GameState':
+    def next(self) -> 'GameStage':
         pass
