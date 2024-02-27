@@ -19,7 +19,7 @@ class Blinky(Ghost):
 
     def _calculate_distance_to_target_from_direction_vector(self, direction: pygame.Vector2):
         tile = GameMap.get_instance().get_tile(self._position + direction)
-        return math.dist(GameMap.get_instance().get_tile(self._target.get_position()).get_rect().center,
+        return math.dist(GameMap.get_instance().get_tile(self._target_tile).get_rect().center,
                          tile.get_rect().center)
 
     def handle_event(self, event: pygame.event.Event):
@@ -31,10 +31,10 @@ class Blinky(Ghost):
             pygame.draw.circle(surface, self.COLOR,
                                GameMap.get_instance().get_tile(self._target_tile).get_rect().center, 5)
 
-    def set_state(self, state):
-        self._state = state
-        self._direction.rotate_ip(180)
-
     def _update_direction_SCATTER(self):
         self._target_tile = self.SCATTER_TILE
-        self._direction = self._select_best_direction()
+        self.set_direction(self._select_best_direction())
+
+    def _update_direction_CHASE(self):
+        self._target_tile = self._target.get_position()
+        self.set_direction(self._select_best_direction())

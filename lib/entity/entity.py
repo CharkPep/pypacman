@@ -37,7 +37,7 @@ class Entity(GameObject, ABC):
     def get_direction(self):
         return self._direction
 
-    def _peek_in_direction(self, direction: pygame.Vector2) -> bool:
+    def peek_in_direction(self, direction: pygame.Vector2) -> bool:
         return GameMap.get_instance().is_passable(self._position + direction)
 
     def _check_if_target_reached(self) -> bool:
@@ -60,6 +60,7 @@ class Entity(GameObject, ABC):
         if self._position.x < 0 or self._position.x > len(
                 GameMap.get_instance().get_map()[0]) or self._position.y < 0 or self._position.y > len(
             GameMap.get_instance().get_map()):
+            # Account for the wrap around
             self._position = pygame.Vector2((len(GameMap.get_instance().get_map()[0]) + self._position.x) % len(
                 GameMap.get_instance().get_map()[0]),
                                             (len(GameMap.get_instance().get_map()) + self._position.y) % len(
@@ -67,7 +68,7 @@ class Entity(GameObject, ABC):
             self._rect.center = GameMap.get_instance().get_tile(self._position).get_rect().center
         if GameMap.get_instance().is_intersection(self._position) and self._change_direction != self._direction:
             # Check if change direction is possible
-            if self._change_direction is not None and self._peek_in_direction(self._change_direction):
+            if self._change_direction is not None and self.peek_in_direction(self._change_direction):
                 self._direction = self._change_direction
                 self._rect.center = GameMap.get_instance().get_tile(self._position).get_rect().center
                 self._change_direction = None
@@ -78,7 +79,7 @@ class Entity(GameObject, ABC):
         return self._position
 
     def move(self, dt):
-        if self._peek_in_direction(self._direction):
+        if self.peek_in_direction(self._direction):
             self._rect.move_ip(self._direction * self._velocity * dt)
 
     def get_rect(self):

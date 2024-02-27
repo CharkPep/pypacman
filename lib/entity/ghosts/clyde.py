@@ -13,7 +13,7 @@ class Clyde(Ghost):
     def __init__(self, position, player: Entity):
         super().__init__(position, 11, player)
         self._player = player
-        self._state = GhostStates.CHASE
+        self._state = GhostStates.IDLE
         self._target_tile = None
         self.SCATTER_TILE = pygame.Vector2(0, len(GameMap.get_instance().get_map()))
 
@@ -35,17 +35,13 @@ class Clyde(Ghost):
                                GameMap.get_instance().get_tile(self._position).get_rect().center,
                                8 * GameMap.get_instance().get_tile_size()[0], width=1)
 
-    def set_state(self, state):
-        self._state = state
-        self._direction.rotate_ip(180)
-
     def _update_direction_SCATTER(self):
         self._target_tile = self.SCATTER_TILE
-        self._direction = self._select_best_direction()
+        self.set_direction(self._select_best_direction())
 
     @override
     def _update_direction_CHASE(self):
         self._target_tile = self._player.get_position()
         if math.dist(self._player.get_position(), self._position) <= 8:
             self._target_tile = self.SCATTER_TILE
-        self._direction = self._select_best_direction()
+        self.set_direction(self._select_best_direction())

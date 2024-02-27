@@ -1,7 +1,8 @@
+import math
 from abc import abstractmethod, ABC
 from lib.map.map import GameMap
 from lib.map.tile import OneWay, Tile
-from lib.enums.game_events import STATE_HANDLER_NOT_IMPLEMENTED
+from lib.enums.game_events import STATE_HANDLER_NOT_IMPLEMENTED, GHOST_EXIT_HOUSE
 from lib.entity.entity import Entity
 from lib.enums.ghost_states import GhostStates
 import pygame
@@ -21,8 +22,16 @@ class Ghost(Entity, ABC):
         super().__init__(position, velocity)
         self._state = GhostStates.IDLE
         self._target = target
+        self._is_active = False
+        self._next_state = None
 
-    def peek_tile(self, tile: Tile, direction: pygame.Vector2):
+    def activate(self):
+        self._is_active = True
+
+    def set_state(self, state):
+        self._next_state = state
+
+    def peek_tile(self, tile: Tile, direction: pygame.Vector2) -> bool:
         return isinstance(GameMap.get_instance().get_tile(self._position + direction), tile)
 
     def _get_possible_directions(self):
@@ -35,22 +44,26 @@ class Ghost(Entity, ABC):
             right = pygame.Vector2(0, -1).rotate(-90)
             straight = pygame.Vector2(0, -1)
             back = pygame.Vector2(0, -1).rotate(180)
-            if self._peek_in_direction(back) or self._state == GhostStates.EXITING_HOUSE and self.peek_tile(OneWay,
-                                                                                                            back):
+            if self.peek_in_direction(back) or self._state == GhostStates.EXITING_HOUSE and self.peek_tile(OneWay,
+                                                                                                           back):
                 possible_directions.append(back)
-        if self._peek_in_direction(left) or self._state == GhostStates.EXITING_HOUSE and self.peek_tile(OneWay, left):
+        if self.peek_in_direction(left) or (self._state == GhostStates.EXITING_HOUSE and self.peek_tile(OneWay, left)):
             possible_directions.append(left)
-        if self._peek_in_direction(right) or self._state == GhostStates.EXITING_HOUSE and self.peek_tile(OneWay, right):
+        if self.peek_in_direction(right) or (
+                self._state == GhostStates.EXITING_HOUSE and self.peek_tile(OneWay, right)):
             possible_directions.append(right)
-        if self._peek_in_direction(straight) or self._state == GhostStates.EXITING_HOUSE and self.peek_tile(OneWay,
-                                                                                                            straight):
+        if self.peek_in_direction(straight) or (self._state == GhostStates.EXITING_HOUSE and self.peek_tile(OneWay,
+                                                                                                            straight)):
             possible_directions.append(straight)
         return possible_directions
 
     def update(self, dt: float):
-        self._update_direction()
-        super().update(dt)
+        if self._is_active:
+            self._update_state()
+            self._update_direction()
+            super().update(dt)
 
+    # TODO Add No move up tiles
     def _select_best_direction(self):
         possible_directions = self._get_possible_directions()
         distance_to_target = self._calculate_distance_to_target_from_direction_vector(self._direction)
@@ -75,13 +88,17 @@ class Ghost(Entity, ABC):
         """
         pass
 
-    @abstractmethod
-    def set_state(self, state):
-        """
-        Changes the state of the ghost
-        """
-        pass
+    def _peek_back(self) -> bool:
+        return self.peek_in_direction(-self._direction)
 
+    def _update_state(self):
+        if self._next_state is not None and self._state != GhostStates.EXITING_HOUSE:
+            self._state = self._next_state
+            if self._peek_back():
+                self._direction = -self._direction
+            self._next_state = None
+
+    # Handles current state target update
     def _update_direction(self):
         is_target_reached = self._check_if_target_reached()
         handler = None
@@ -93,32 +110,39 @@ class Ghost(Entity, ABC):
         if handler is not None and is_target_reached:
             handler()
 
-    # Basic implementation for GhostStates
-    def _update_direction_CHASE(self):
-        self._target_tile = self._target.get_position()
-        self._direction = self._select_best_direction()
-
     def _update_direction_IDLE(self):
-        self._direction = pygame.Vector2(0, 0)
+        self.set_direction(pygame.Vector2(0, 0))
+        self._target_tile = None
 
     def _update_direction_FRIGHTENED(self):
         direction = random.choice(self._get_possible_directions())
-        self._direction = direction
+        self.set_direction(direction)
 
     def _update_direction_DEAD(self):
-        self._target_tile = GameMap.get_instance().get_ghost_house_exit()
-        self._direction = self._select_best_direction()
+        self._target_tile = pygame.Vector2(
+            GameMap.get_instance().get_metadate()["ghost_house"]["ghost_house_exit_target"])
+        self.set_direction(self._select_best_direction())
         if self._position == self._target_tile:
             self.set_state(GhostStates.EXITING_HOUSE)
 
+    def _is_ghost_touch_ghost_house_exit(self):
+        return math.dist(self._position,
+                         GameMap.get_instance().get_metadate()["ghost_house"]["entrance"]) == 1
+
+    # Exiting house is a initial state that allows ghost to move in any direction to achieve the target tile
     def _update_direction_EXITING_HOUSE(self):
-        self._target_tile = GameMap.get_instance().get_ghost_house_exit()
+        self._target_tile = pygame.Vector2(
+            GameMap.get_instance().get_metadate()["ghost_house"]["ghost_house_exit_target"])
+        entrance = GameMap.get_instance().get_metadate()["ghost_house"]["entrance"]
+        if self._is_ghost_touch_ghost_house_exit() and self._position != self._target_tile:
+            self._position = pygame.Vector2(entrance)
         self._direction = self._select_best_direction()
         if self._position == self._target_tile:
-            self._state = GhostStates.CHASE
+            pygame.event.post(pygame.event.Event(GHOST_EXIT_HOUSE, message=self))
+            self._state = GhostStates.IDLE
 
     def move(self, dt):
-        if self._peek_in_direction(self._direction) or self._state == GhostStates.EXITING_HOUSE and self.peek_tile(
+        if self.peek_in_direction(self._direction) or self._state == GhostStates.EXITING_HOUSE and self.peek_tile(
                 OneWay,
                 self._direction):
             self._rect.move_ip(self._direction * self._velocity * dt)

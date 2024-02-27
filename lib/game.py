@@ -1,5 +1,5 @@
 from .stage import GameStage
-import pygame
+import pygame, os
 
 
 class Game:
@@ -12,10 +12,14 @@ class Game:
         self.__state.update(dt)
 
     def handle_events(self, events):
-        for event in events:
-            if event == pygame.QUIT:
-                exit(0)
-            self.__state.handle_event(event)
+        try:
+            for event in events:
+                if event == pygame.QUIT:
+                    exit(0)
+                self.__state.handle_event(event)
+        except Exception as e:
+            print(e)
+            exit(1)
 
     def render(self):
         self.__state.render()

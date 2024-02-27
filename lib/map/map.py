@@ -6,26 +6,13 @@ from .tile import Tile
 
 class GameMap:
     _map: List[List[Tile]] = None
-    _player_spawn = None
-    _score = []
-    _boosts = []
-    _ghost_spawn_tiles = []
-    _curr_ghost_spawn_tile = -1
     _instance = None
-    _ghost_house_exit_tile = None
 
     @classmethod
     def get_instance(cls, *args, **kwargs) -> 'GameMap':
         if cls._instance is None:
             cls._instance = cls(*args, **kwargs)
         return cls._instance
-
-    def get_next_ghost_house_tile(self):
-        self._curr_ghost_spawn_tile = (self._curr_ghost_spawn_tile + 1) % len(self._ghost_spawn_tiles)
-        return pygame.Vector2(self._ghost_spawn_tiles[self._curr_ghost_spawn_tile])
-
-    def get_ghost_house_exit(self):
-        return self._ghost_house_exit_tile
 
     def is_intersection(self, tile: pygame.Vector2):
         top = self.is_passable(tile)
@@ -43,11 +30,9 @@ class GameMap:
     def get_tile_size(self):
         return self._map[0][0].get_rect().width, self._map[0][0].get_rect().height
 
-    def __init__(self, tiles: List[List[Tile]], ghost_house: List[pygame.Vector2], ghost_house_exit: pygame.Vector2,
+    def __init__(self, tiles: List[List[Tile]],
                  background: pygame.image = None, **metadate):
         self._map = tiles
-        self._ghost_spawn_tiles = ghost_house
-        self._ghost_house_exit_tile = ghost_house_exit
         self._background = background
         self._metadate = metadate
 

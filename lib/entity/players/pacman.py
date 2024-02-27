@@ -9,6 +9,7 @@ class Pacman(Entity):
     def __init__(self):
         super().__init__(self.SPAWN_POSITION, 11)
 
+    # TODO Remove to some other place e.g FileLoader, ImageUtils etc
     # def resize_images(self, images: dict, width: int, height: int) -> dict:
     #     resized_images = {}
     #     for key, image in images.items():

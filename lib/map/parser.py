@@ -76,7 +76,6 @@ class DefaultMapParser(MapParser):
         if size == 0:
             raise ValueError("The map is too big for the screen")
         first_rectangle_position = (screen_size[0] - columns * size) / 2., (screen_size[1] - lines * size) / 2.
-        ghost_house_exit = None
         for i in range(len(game_map)):
             for j in range(len(game_map[i])):
                 if game_map[i][j] is None:
@@ -87,7 +86,5 @@ class DefaultMapParser(MapParser):
                 game_map[i][j] = game_map[i][j](
                     (first_rectangle_position[0] + size * j, first_rectangle_position[1] + size * i), (size, size),
                     rectangle_image)
-                if isinstance(game_map[i][j], OneWay):
-                    ghost_house_exit = pygame.Vector2(j, i)
-        return GameMap.get_instance(game_map, data["ghost_house"], ghost_house_exit,
+        return GameMap.get_instance(game_map, ghost_house=data["ghost_house"],
                                     chase_duration=data["chase_duration"], scatter_duration=data["scatter_duration"])

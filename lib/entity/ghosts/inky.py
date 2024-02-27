@@ -16,7 +16,7 @@ class Inky(Ghost):
     def __init__(self, position, player: Entity, blinky: Entity):
         super().__init__(position, 11, player)
         self._player = player
-        self._state = GhostStates.CHASE
+        self._state = GhostStates.IDLE
         self._target_tile: Union[pygame.Vector2, None] = None
         self._blinky = blinky
         self.SCATTER_TILE = pygame.Vector2(len(GameMap.get_instance().get_map()) - 1,
@@ -43,10 +43,6 @@ class Inky(Ghost):
                              GameMap.get_instance().get_tile(self._vector_to_blinky[0]).get_rect().center,
                              GameMap.get_instance().get_tile(self._vector_to_blinky[1]).get_rect().center, 1)
 
-    def set_state(self, state):
-        self._state = state
-        self._direction.rotate_ip(180)
-
     def _get_tile_in_front_of_player(self, tiles: int) -> pygame.Vector2:
         return self._player.get_position() + self._player.get_direction() * tiles
 
@@ -57,11 +53,11 @@ class Inky(Ghost):
 
     def _update_direction_SCATTER(self):
         self._target_tile = self.SCATTER_TILE
-        self._direction = self._select_best_direction()
+        self.set_direction(self._select_best_direction())
 
     @override
     def _update_direction_CHASE(self):
         self._target_tile = self._get_tile_in_front_of_player(2)
         if self._player.get_direction() == pygame.Vector2(0, -1):
             self._target_tile = self._get_tile_in_front_and_left_of_player(2)
-        self._direction = self._select_best_direction()
+        self.set_direction(self._select_best_direction())

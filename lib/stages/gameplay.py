@@ -11,18 +11,17 @@ import pygame
 class GameplayStage(GameStage):
     _map: GameMap = None
     _entities: List[GameObject] = []
-    _font: pygame.font.Font = None
+    font: pygame.font.Font = None
     _next_state = None
     score: int = 0
 
     def __init__(self, screen: pygame.surface.Surface):
-        self._map = GameMap.get_instance()
-        self.__screen = screen
+        self.screen = screen
         player = Pacman()
         self.add_entity(player)
         self._ghost_manager = GhostManager(self)
-        self._clock = pygame.time.Clock()
-        self._font = pygame.font.SysFont('Comic Sans MS', 30)
+        self.clock = pygame.time.Clock()
+        self.font = pygame.font.SysFont('Comic Sans MS', 30)
 
     def add_entity(self, *entities: GameObject):
         self._entities.extend([*entities])
@@ -35,15 +34,18 @@ class GameplayStage(GameStage):
         return 60
 
     def render(self):
-        self._map.render(self.__screen)
+        GameMap.get_instance().render(self.screen)
         for entity in self._entities:
-            entity.render(self.__screen)
-        self.__screen.blit(self._font.render(f"Score: {self.score}", True, (255, 255, 255)), (0, 0))
+            entity.render(self.screen)
+        self.screen.blit(self.font.render(f"Score: {self.score}", True, (255, 255, 255)), (0, 0))
+        self.screen.blit(
+            self.font.render(f"Ghosts: {self._ghost_manager.get_global_ghost_state()}", True, (255, 255, 255)),
+            (100, 0))
 
     def update(self, dt: float):
         for entity in self._entities:
             entity.update(dt)
-        self._clock.tick(self.get_target_fps())
+        self.clock.tick(self.get_target_fps())
 
     def handle_event(self, event):
         if event.type == pygame.QUIT:
@@ -52,7 +54,7 @@ class GameplayStage(GameStage):
             print("State Handler not implemented", event.message)
         if event.type == NEXT_LEVEL:
             self._ghost_manager.next_level()
-
+        self._ghost_manager.handle_event(event)
         for entity in self._entities:
             entity.handle_event(event)
 
