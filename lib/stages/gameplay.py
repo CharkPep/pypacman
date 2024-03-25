@@ -21,6 +21,8 @@ class GameplayStage(GameStage):
         self.add_entity(player)
         self._ghost_manager = GhostManager(self)
         self.clock = pygame.time.Clock()
+        self._score = 0
+        self._fruits = None
         self.font = pygame.font.SysFont('Comic Sans MS', 30)
 
     def add_entity(self, *entities: GameObject):

@@ -13,3 +13,6 @@ class TitleState:
 
     def render(self):
         pass
+
+    def handle_start(self):
+        pass

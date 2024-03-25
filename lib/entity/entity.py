@@ -31,7 +31,7 @@ class Entity(GameObject, ABC):
         self._rect = pygame.rect.Rect(GameMap.get_instance().get_tile(self._position).get_rect())
 
     def set_direction(self, direction: pygame.Vector2):
-        # Can not really change speed if the entity is not in the middle of a tile
+        # Can not really change direction if the entity is not in the middle of a tile
         self._change_direction = direction
 
     def get_direction(self):

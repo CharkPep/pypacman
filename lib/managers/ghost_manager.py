@@ -4,7 +4,7 @@ from lib.entity.ghosts.pinky import Pinky
 from lib.entity.ghosts.inky import Inky
 from lib.entity.ghosts.clyde import Clyde
 from lib.entity.players.pacman import Pacman
-from lib.enums.game_events import GHOST_EXIT_HOUSE
+from lib.enums.game_events import GHOST_EXIT_HOUSE, PALLET_EATEN
 from lib.map.map import GameMap
 from itertools import cycle
 import threading
@@ -29,9 +29,9 @@ class GhostManager:
         inky.set_state(GhostStates.EXITING_HOUSE)
         clyde.set_state(GhostStates.EXITING_HOUSE)
         blinky.activate()
-        # pinky.activate()
-        # inky.activate()
-        # clyde.activate()
+        pinky.activate()
+        inky.activate()
+        clyde.activate()
         self._add_ghost(blinky, pinky, inky, clyde)
         game.add_entity(blinky, pinky, inky, clyde)
         self._level = 1
@@ -45,6 +45,9 @@ class GhostManager:
         if event.type == GHOST_EXIT_HOUSE and not self._is_ghost_exited_house:
             self._is_ghost_exited_house = True
             self.update_scatter()
+        if event.type == PALLET_EATEN and self._is_ghost_exited_house:
+            for ghost in self.ghosts:
+                ghost.set_state(GhostStates.FRIGHTENED)
 
     def update_chase(self):
         self._global_ghost_state = GhostStates.CHASE
