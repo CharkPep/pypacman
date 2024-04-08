@@ -1,25 +1,55 @@
 from .stage import GameStage
-import pygame, os
+from lib.utils.singleton import SingletonMeta
+from lib.map.parser import TiledMapParser
+from lib.stages.gameplay import GameplayStage
+import time
+import pygame
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-class Game:
-    __state: GameStage = None
+class Game(metaclass=SingletonMeta):
+    _stage: GameStage = None
+    __current_time = time.time()
+    __prev_time = __current_time
 
-    def __init__(self, state: GameStage):
-        self.__state: GameStage = state
+    def __init__(self, **kwargs):
+        pygame.init()
+        pygame.display.set_caption("Pacman")
+        self._screen = pygame.display.set_mode((int(kwargs["width"]), int(kwargs["height"])))
+        self.kwargs = kwargs
+        if kwargs.get("verbose", False):
+            logger.setLevel(logging.DEBUG)
+        TiledMapParser(kwargs.get("level", "../levels/original.json"), verbose=kwargs.get("verbose", False)).parse(
+            resolution=kwargs["RESOLUTION"])
+        self._stage_screen = pygame.Surface(kwargs["RESOLUTION"])
+        self._stage = GameplayStage(self._stage_screen, verbose=kwargs.get("verbose", False))
 
-    def update(self, dt: float):
-        self.__state.update(dt)
+    def start(self):
+        self._stage.start()
+
+    def update(self):
+        self.__current_time = time.time()
+        dt = self.__current_time - self.__prev_time
+        self._stage.update(dt)
+        self.__prev_time = self.__current_time
 
     def handle_events(self, events):
-        try:
-            for event in events:
-                if event == pygame.QUIT:
-                    exit(0)
-                self.__state.handle_event(event)
-        except Exception as e:
-            print(e)
-            exit(1)
+        """
+        Handle events
+        :param events: List[pygame.event.Event]
+        """
+
+        for event in events:
+            self._stage.handle_event(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
 
     def render(self):
-        self.__state.render()
+        self._screen.fill((0, 0, 0))
+        self._stage.render()
+        min_side = min(self.kwargs["width"], self.kwargs["height"])
+        self._screen.blit(pygame.transform.scale(self._stage_screen, (min_side, min_side)),
+                          ((self.kwargs["width"] - min_side) // 2, (self.kwargs["height"] - min_side) // 2))

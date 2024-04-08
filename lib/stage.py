@@ -8,6 +8,12 @@ class GameStage(ABC):
     def update(self, dt: float):
         pass
 
+    def start(self):
+        pass
+
+    def reset(self):
+        pass
+
     def render(self):
         pass
 

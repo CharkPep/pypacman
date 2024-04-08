@@ -1,65 +1,44 @@
-from typing import List, Union, Tuple, Dict
-from lib.map.tile import OneWay
 import pygame.surface
 from .tile import Tile
+from lib.utils.singleton import SingletonMeta
 
 
-class GameMap:
-    _map: List[List[Tile]] = None
-    _instance = None
+class GameMap(metaclass=SingletonMeta):
+    layers = None
 
-    @classmethod
-    def get_instance(cls, *args, **kwargs) -> 'GameMap':
-        if cls._instance is None:
-            cls._instance = cls(*args, **kwargs)
-        return cls._instance
+    def __init__(self, **props):
+        """
+        :param layers: list of layers, layers must be the same size
+        :param tile_set: Tileset used to blit tiles on the screen as tile by itself does not contain image
+        :param props:  dictionary of properties
+        :param width: int, width of the map in tiles
+        :param height: int, height of the map in tiles
+        """
+        self.layers = props["layers"]
+        self.background = props["background"]
+        self.props = {}
+        for prop in props["properties"]:
+            self.props[prop["name"]] = prop["value"]
+        self.width = props["width"]
+        self.height = props["height"]
 
-    def is_intersection(self, tile: pygame.Vector2):
-        top = self.is_passable(tile)
-        left = self.is_passable(pygame.Vector2(tile[0] - 1, tile[1]))
-        right = self.is_passable(pygame.Vector2(tile[0] + 1, tile[1]))
-        bottom = self.is_passable(pygame.Vector2(tile[0], tile[1] + 1))
-        return top + left + right + bottom >= 2
-
-    def is_passable(self, tile: pygame.Vector2) -> bool:
-        tile = self.get_tile(tile)
-        if tile is None:
-            return False
-        return tile.passable()
-
-    def get_tile_size(self):
-        return self._map[0][0].get_rect().width, self._map[0][0].get_rect().height
-
-    def __init__(self, tiles: List[List[Tile]],
-                 background: pygame.image = None, **metadate):
-        self._map = tiles
-        self._background = background
-        self._metadate = metadate
-
-    def get_metadate(self):
-        return self._metadate
+    def reset(self):
+        for tile in self.layers[1]:
+            if tile.id != 0:
+                tile.kwargs["render"] = True
 
     def render(self, surface: pygame.surface.Surface):
-        if self._background is not None:
-            surface.blit(self._background, (0, 0))
-        else:
-            surface.fill((0, 0, 0))
-        for layer in self._map:
+        if self.background is not None:
+            surface.blit(self.background, (0, 0))
+        for layer in self.layers:
             for tile in layer:
                 tile.render(surface)
 
-    def get_map(self) -> List[List[Tile]]:
-        return self._map
-
-    def clamp(self, value, min_value, max_value):
-        return max(min_value, min(value, max_value))
-
     def clamp_position(self, position: pygame.Vector2):
-        return pygame.Vector2(self.clamp(position.x, 0, len(self._map[0]) - 1),
-                              self.clamp(position.y, 0, len(self._map) - 1))
+        x = max(0, min(position.x, self.width - 1))
+        y = max(0, min(position.y, self.height - 1))
+        return pygame.Vector2(x, y)
 
-    def get_tile(self, position: pygame.Vector2) -> Tile:
-        if position.y < 0 or position.y >= len(self._map) or position.x < 0 or position.x >= len(self._map[0]):
-            position = self.clamp_position(position)
-            return self._map[int(position.y)][int(position.x)]
-        return self._map[int(position.y)][int(position.x)]
+    def get_tile(self, position: pygame.Vector2, layer=0) -> Tile:
+        position = self.clamp_position(position)
+        return self.layers[layer][int(position.y * self.width + position.x)]
