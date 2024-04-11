@@ -4,11 +4,26 @@ from lib.enums.game_events import POINT_EATEN, PALLET_EATEN
 from lib.entity.entity import Entity
 
 
+def resize_images(images: dict, width: int, height: int) -> dict:
+    resized_images = {}
+    for key, image in images.items():
+        resized_image = pygame.transform.scale(image, (width, height))
+        resized_images[key] = resized_image
+    return resized_images
+
+
 class Pacman(Entity):
 
     def __init__(self, spawn=(1, 1), velocity=11, **kwargs):
         super().__init__(pygame.Vector2(spawn), VELOCITY=velocity, **kwargs)
-        # self.sprite = tileset
+        images = {
+            'up': pygame.image.load('assets/pacman/pacman0.png'),
+            'down': pygame.image.load('./assets/pacman/pacman1.png'),
+            'left': pygame.image.load('./assets/pacman/pacman2.png'),
+            'right': pygame.image.load('assets/pacman/pacman3.png')
+        }
+        self.__image_dict = images
+        self.__image = self.__image_dict['right']
 
     def update(self, dt: float):
         on_tile = GameMap().get_tile(self._position, layer=1)
@@ -24,15 +39,16 @@ class Pacman(Entity):
     def handle_event(self, event: pygame.event.Event):
         if event.dict.get('key') == pygame.K_UP and event.type == pygame.KEYDOWN:
             self.set_direction(pygame.Vector2(0, -1))
+            self.__image = self.__image_dict['up']
         elif event.dict.get('key') == pygame.K_DOWN and event.type == pygame.KEYDOWN:
             self.set_direction(pygame.Vector2(0, 1))
+            self.__image = self.__image_dict['down']
         elif event.dict.get('key') == pygame.K_LEFT and event.type == pygame.KEYDOWN:
             self.set_direction(pygame.Vector2(-1, 0))
+            self.__image = self.__image_dict['left']
         elif event.dict.get('key') == pygame.K_RIGHT and event.type == pygame.KEYDOWN:
             self.set_direction(pygame.Vector2(1, 0))
+            self.__image = self.__image_dict['right']
 
     def render(self, surface: pygame.surface.Surface):
-        # surface.blit(next(iter(self.sprite)), self.rect)
-        if self.kwargs.get("verbose", False):
-            pygame.draw.circle(surface, (255, 255, 0), self.rect.center, self.rect.width // 2)
-            pygame.draw.rect(surface, (255, 0, 0), self.rect, width=1)
+        surface.blit(self.__image, self.rect.topleft)

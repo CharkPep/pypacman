@@ -47,7 +47,7 @@ class TiledMapParser:
                 map_layers.append(self._parse_layer(layer, tile_size))
 
         background = pygame.Surface(resolution)
-        background.fill((255, 255, 255))
+        background.fill(self.props.get('color', 'blue'))
         layers["background"] = background
         layers["layers"] = map_layers
         return GameMap(**self.props, **layers)
