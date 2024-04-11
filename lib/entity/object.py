@@ -3,6 +3,7 @@ import pygame
 
 
 class GameObject(ABC, pygame.sprite.Sprite):
+    rect = pygame.rect.Rect(0, 0, 0, 0)
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -28,8 +29,4 @@ class GameObject(ABC, pygame.sprite.Sprite):
         Handles the event
         :param event: Event to handle
         """
-        pass
-
-    @abstractmethod
-    def collide(self, other: pygame.rect.Rect):
         pass
