@@ -15,12 +15,14 @@ class Clyde(Ghost):
         self._player = player
         self._target_tile = None
         self.SCATTER_TILE = pygame.Vector2(0, GameMap().height)
+        self.__image = pygame.image.load('assets/ghosts/clyde.png')
 
     def handle_event(self, event: pygame.event.Event):
         pass
 
     def render(self, surface: pygame.surface.Surface):
-        pygame.draw.rect(surface, self.COLOR, self.rect)
+        image_rect = self.__image.get_rect(topleft=self.rect.topleft)
+        surface.blit(self.__image, image_rect)
         if self._target_tile is not None:
             pygame.draw.circle(surface, self.COLOR,
                                GameMap().get_tile(self._target_tile).rect.center, 5)

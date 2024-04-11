@@ -19,6 +19,7 @@ class Inky(Ghost):
         self._target_tile: Union[pygame.Vector2, None] = None
         self._blinky = blinky
         self.SCATTER_TILE = pygame.Vector2(GameMap().width - 1, GameMap().height - 1)
+        self.__image = pygame.image.load('assets/ghosts/inky.png')
 
     # def _calculate_distance_to_target_from_direction_vector(self, direction: pygame.Vector2):
     #     self._vector_to_blinky = [self._target_tile, self._blinky.get_position()]
@@ -32,7 +33,8 @@ class Inky(Ghost):
         pass
 
     def render(self, surface: pygame.surface.Surface):
-        pygame.draw.rect(surface, self.COLOR, self.rect)
+        image_rect = self.__image.get_rect(topleft=self.rect.topleft)
+        surface.blit(self.__image, image_rect)
         if self._target_tile is not None:
             pygame.draw.circle(surface, self.COLOR,
                                GameMap().get_tile(self._target_tile).rect.center, 5)

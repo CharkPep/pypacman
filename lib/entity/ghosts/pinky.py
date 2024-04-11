@@ -17,6 +17,7 @@ class Pinky(Ghost):
         self._player = player
         self._target_tile = None
         self.SCATTER_TILE = pygame.Vector2(1, 1)
+        self.__image = pygame.image.load('assets/ghosts/pinky.png')
 
     def _calculate_distance_to_target_from_direction_vector(self, direction: pygame.Vector2):
         tile = GameMap().get_tile(self._position + direction)
@@ -27,7 +28,8 @@ class Pinky(Ghost):
         pass
 
     def render(self, surface: pygame.surface.Surface):
-        pygame.draw.rect(surface, self.COLOR, self.rect)
+        image_rect = self.__image.get_rect(topleft=self.rect.topleft)
+        surface.blit(self.__image, image_rect)
         if self._target_tile is not None:
             pygame.draw.circle(surface, self.COLOR,
                                GameMap().get_tile(self._target_tile).rect.center, 5)

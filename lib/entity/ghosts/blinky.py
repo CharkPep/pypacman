@@ -15,6 +15,7 @@ class Blinky(Ghost):
     def __init__(self, position, player: Entity):
         super().__init__(position, 11, player)
         self.SCATTER_TILE = pygame.Vector2(GameMap().width, 0)
+        self.__image = pygame.image.load('assets/ghosts/blinky.png')
 
     def _calculate_distance_to_target_from_direction_vector(self, direction: pygame.Vector2):
         tile = GameMap().get_tile(self._position + direction)
@@ -25,7 +26,9 @@ class Blinky(Ghost):
         pass
 
     def render(self, surface: pygame.surface.Surface):
-        pygame.draw.rect(surface, self.COLOR, self.rect)
+        image_rect = self.__image.get_rect(topleft=self.rect.topleft)
+        surface.blit(self.__image, image_rect)
+
         pygame.draw.circle(surface, self.COLOR, GameMap().get_tile(self._position).rect.center, 5)
         if self._target_tile is not None:
             pygame.draw.circle(surface, self.COLOR,
