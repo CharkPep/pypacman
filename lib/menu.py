@@ -24,13 +24,14 @@ class Menu:
         self.app.add_argument("-he", "--height", default=800, help="height of the image")
         self.app.add_argument('-l', '--level', default="./levels/original.json", help="level file")
         self.app.add_argument("-v", "--verbose", default=False, action="store_true", help="increase output verbosity")
+        self.app.add_argument("-c", "--color", default="blue", help="background color")
 
     def start_game(self, args):
         args["width"] = int(args["width"])
         args["height"] = int(args["height"])
 
         self.game = Game(width=args["width"], height=args["height"],
-                         level=args["level"], verbose=args["verbose"], **self.settings)
+                         level=args["level"], verbose=args["verbose"], color=args["color"], **self.settings)
         self.game.start()
         self.running = True
 

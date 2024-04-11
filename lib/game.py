@@ -21,8 +21,8 @@ class Game(metaclass=SingletonMeta):
         self.kwargs = kwargs
         if kwargs.get("verbose", False):
             logger.setLevel(logging.DEBUG)
-        TiledMapParser(kwargs.get("level", "../levels/original.json"), verbose=kwargs.get("verbose", False)).parse(
-            resolution=kwargs["RESOLUTION"])
+        TiledMapParser(kwargs.get("level", "../levels/original.json"), verbose=kwargs.get("verbose", False),
+                       color=kwargs.get("color")).parse(resolution=kwargs["RESOLUTION"])
         self._stage_screen = pygame.Surface(kwargs["RESOLUTION"])
         self._stage = GameplayStage(self._stage_screen, verbose=kwargs.get("verbose", False))
 
