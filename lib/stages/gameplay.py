@@ -6,6 +6,7 @@ from lib.entity.pacman import Pacman
 from lib.entity.object import GameObject
 from lib.map.map import GameMap
 from lib.enums.game_events import GAME_OVER, NEXT_LEVEL, POINT_EATEN, GHOST_PLAYER_COLLISION, PALLET_EATEN
+from lib.utils.sound_manager import SoundManager
 from lib.utils.singleton import SingletonMeta
 import pygame
 import logging
@@ -30,6 +31,7 @@ class GameplayStage(GameStage):
         self._lives = 3
         self._fruits = None
         self._left_points = GameMap().points
+        self.sound_manager = SoundManager()
         self.font = pygame.font.SysFont('Comic Sans MS', 30)
         self.kwargs = kwargs
 
@@ -80,13 +82,18 @@ class GameplayStage(GameStage):
 
     def handle_event(self, event):
         if event.type == GAME_OVER:
+            self.sound_manager.play_sound('death')
             self.reset()
         if event.type == POINT_EATEN:
+            self.sound_manager.play_sound('chomp')
             self.score += 10
             self._left_points -= 1
         if event.type == PALLET_EATEN:
+            self.sound_manager.play_sound('chomp')
             self.score += 50
         if event.type == GHOST_PLAYER_COLLISION:
+            self.sound_manager.stop_sound()
+            self.sound_manager.play_sound('eat_ghost')
             self.score += 200
         if self._left_points == 0:
             self.reset()
