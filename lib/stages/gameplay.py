@@ -24,7 +24,7 @@ class GameplayStage(GameStage):
         TiledMapParser(layers=kwargs.get("map", "./levels/original.json")).parse(kwargs.get("RESOLUTION"))
         self._player = Pacman(**kwargs)
         self.add_entity(self._player)
-        self._ghost_group = GhostGroup(self._player, 1, **kwargs)
+        self._ghost_group = GhostGroup(self._player, **kwargs)
         self.clock = pygame.time.Clock()
         self._score = 0
         self._lives = 3
@@ -84,8 +84,10 @@ class GameplayStage(GameStage):
         if event.type == POINT_EATEN:
             self.score += 10
             self._left_points -= 1
-        if event.type == GHOST_PLAYER_COLLISION or event.type == PALLET_EATEN:
+        if event.type == PALLET_EATEN:
             self.score += 50
+        if event.type == GHOST_PLAYER_COLLISION:
+            self.score += 200
         if self._left_points == 0:
             self.reset()
         if event.type == NEXT_LEVEL:
