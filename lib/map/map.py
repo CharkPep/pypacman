@@ -21,6 +21,10 @@ class GameMap(metaclass=SingletonMeta):
             self.props[prop["name"]] = prop["value"]
         self.width = props["width"]
         self.height = props["height"]
+        self.points = 0
+        for tile in self.layers[1]:
+            if tile.id != 0:
+                self.points += 1
 
     def reset(self):
         for tile in self.layers[1]:

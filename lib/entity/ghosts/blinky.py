@@ -3,9 +3,6 @@ from lib.map.map import GameMap
 from ..entity import Entity
 import pygame
 import math
-import random
-from typing_extensions import override
-from lib.enums.ghost_states import GhostStates
 
 
 # Red

@@ -1,41 +1,24 @@
 import pygame
-import logging
-import sys
-from lib.map import parser, map
-import xml.etree.ElementTree as ET
-from lib.utils import tileset, singleton
-from lib.map.tile import Tile
 
-# resolution = (800, 800)
-# 
-# pygame.init()
-# screen = pygame.display.set_mode(resolution)
-# pygame.display.set_caption("Test")
-# clock = pygame.time.Clock()
-# running = True
-# render = parser.TiledMapParser("./levels/original.json", verbose=True)
-# render.parse()
-# map.GameMap().layers[0][0].kill()
-# while running:
-#     screen.fill((255, 255, 255))
-#     map.GameMap().render(screen)
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             running = False
-# 
-#     pygame.display.flip()
-#     clock.tick(60)
+resolution = (800, 800)
 
-# with open("./levels/pacman-map.tsx", "r") as file:
-#     props = ET.parse(file)
-#     root = props.getroot()
-#     for tile in root.findall("./tile"):
-#         print(tile.attrib, tile.tag)
-#         for child in tile.findall("./properties/property"):
-#             print(child.attrib, child.tag)
+pygame.init()
+screen = pygame.display.set_mode(resolution)
+rect = pygame.rect.Rect((100, 100), (400, 400))
+print(rect)
+pygame.display.set_caption("Test")
+clock = pygame.time.Clock()
+running = True
+while running:
+    screen.fill((255, 255, 255))
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler(sys.stdout))
-logger.info("INFO: Starting game")
+    pygame.draw.rect(screen, (0, 0, 0), rect)
+
+    if rect.collidepoint(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]):
+        pygame.draw.rect(screen, (255, 0, 0), rect)
+
+    pygame.display.flip()
+    clock.tick(60)
