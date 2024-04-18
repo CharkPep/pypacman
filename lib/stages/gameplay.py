@@ -70,9 +70,6 @@ class GameplayStage(GameStage):
         self._ghost_group.start()
 
     def reset(self):
-        if self._lives <= 0:
-            GameMap().reset()
-            self._lives = 3
         self._ghost_group.freeze()
         self._player.freeze()
         self._lives -= 1
@@ -82,7 +79,12 @@ class GameplayStage(GameStage):
 
     def handle_event(self, event):
         if event.type == GAME_OVER:
-            self.sound_manager.play_sound('death')
+            if self._lives <= 0:
+                # DRAW GAME OVER
+                self._lives = 3
+                self.sound_manager.play_sound_sync('death')
+                # -> TO MAIN MENU
+            self.sound_manager.play_sound_sync('death')
             self.reset()
         if event.type == POINT_EATEN:
             self.sound_manager.play_sound('chomp')
