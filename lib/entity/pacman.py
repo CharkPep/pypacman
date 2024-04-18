@@ -1,6 +1,8 @@
 import logging
 
 import pygame
+from typing_extensions import override
+
 from lib.map.map import GameMap
 from lib.enums.game_events import POINT_EATEN, PALLET_EATEN
 from lib.entity.entity import Entity
@@ -30,6 +32,11 @@ class Pacman(Entity):
 
         surface.blit(self.__image, self.rect.topleft)
         super().render(surface)
+
+    @override
+    def reset(self):
+        super().reset()
+        self.__image = self.__image_dict['right']
 
     def update(self, dt: float):
         on_tile = GameMap().get_tile(self._position, layer=1)
