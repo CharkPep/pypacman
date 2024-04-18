@@ -25,7 +25,10 @@ class Game(metaclass=SingletonMeta):
             Menu: Menu(self._screen),
             GameplayStage: GameplayStage(**kwargs)
         }
+
         self._stage = self.states[Menu]
+        if kwargs.get("debug", False):
+            self._stage = self.states[GameplayStage]
 
     def start(self):
         self._stage.start()
@@ -45,7 +48,7 @@ class Game(metaclass=SingletonMeta):
 
     def update(self):
         """
-        handles update with delta time accounted
+        Handles update with delta time accounted
         """
         self.__current_time = time.time()
         dt = self.__current_time - self.__prev_time

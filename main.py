@@ -21,5 +21,5 @@ with open("./settings.json") as file:
     settings = json.load(file)
 settings["RESOLUTION"] = tuple(map(int, str(settings["RENDER_RESOLUTION"]).split("x")))
 game = Game(width=args["width"], height=args["height"], map=args["map"],
-            verbose=args["verbose"], color=args["color"], **settings)
+            verbose=args["verbose"], color=args["color"], debug=args["debug"], **settings)
 game.start()
