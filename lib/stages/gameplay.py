@@ -24,7 +24,7 @@ class GameplayStage(GameStage):
         TiledMapParser(layers=kwargs.get("map", "./levels/original.json")).parse(kwargs.get("RESOLUTION"))
         self._player = Pacman(**kwargs)
         self.add_entity(self._player)
-        self._ghost_group = GhostGroup(self._player, 1, **kwargs)
+        self._ghost_group = GhostGroup(self._player, level=1, **kwargs)
         self.clock = pygame.time.Clock()
         self._score = 0
         self._lives = 3

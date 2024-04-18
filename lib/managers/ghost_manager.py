@@ -28,6 +28,7 @@ class GhostGroup(pygame.sprite.Group):
         self._player = player
         with open(ghost_props) as file:
             data = json.load(file)
+            logger.debug(f"Loaded {ghost_props}")
             self._chase_time = cycle(iter(data["chase_duration"][str(self._level)]))
             self._scatter_time = cycle(iter(data["scatter_duration"][str(self._level)]))
             blinky = Blinky(pygame.Vector2(data["blinky_spawn"]), player)
