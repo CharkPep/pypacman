@@ -1,4 +1,6 @@
 import pygame
+from typing_extensions import override
+
 from lib.map.map import GameMap
 from lib.enums.game_events import POINT_EATEN, PALLET_EATEN
 from lib.entity.entity import Entity
@@ -23,6 +25,11 @@ class Pacman(Entity):
             'right': pygame.image.load('assets/pacman/pacman3.png')
         }
         self.__image_dict = images
+        self.__image = self.__image_dict['right']
+
+    @override
+    def reset(self):
+        super().reset()
         self.__image = self.__image_dict['right']
 
     def update(self, dt: float):

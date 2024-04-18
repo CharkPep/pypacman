@@ -24,10 +24,10 @@ class GameplayStage(GameStage):
         self.screen = screen
         self._player = Pacman(**kwargs)
         self.add_entity(self._player)
-        self._ghost_group = GhostGroup(self._player, **kwargs)
+        self._ghost_group = GhostGroup(self._player, 1, **kwargs)
         self.clock = pygame.time.Clock()
         self._score = 0
-        self._lives = 1
+        self._lives = 3
         self._fruits = None
         self.font = pygame.font.SysFont('Comic Sans MS', 30)
         self.kwargs = kwargs
@@ -63,13 +63,15 @@ class GameplayStage(GameStage):
         self._ghost_group.start()
 
     def reset(self):
+        if self._lives <= 0:
+            GameMap().reset()
+            self._lives = 3
         self._ghost_group.freeze()
         self._player.freeze()
         self._lives -= 1
         logger.info(f'Game Over, left lives {self._lives}')
         self._ghost_group.reset()
         self._player.reset()
-        GameMap().reset()
 
     def handle_event(self, event):
         if event.type == GAME_OVER:
