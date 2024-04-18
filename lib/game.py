@@ -1,7 +1,8 @@
-from .stage import GameStage
+from lib.stage import GameStage
 from lib.utils.singleton import SingletonMeta
-from lib.map.parser import TiledMapParser
+from lib.stages.menu import Menu
 from lib.stages.gameplay import GameplayStage
+from lib.enums.game_events import NEXT_STAGE
 import time
 import pygame
 import logging
@@ -17,19 +18,35 @@ class Game(metaclass=SingletonMeta):
     def __init__(self, **kwargs):
         pygame.init()
         pygame.display.set_caption("Pacman")
-        self._screen = pygame.display.set_mode((int(kwargs["width"]), int(kwargs["height"])))
+        self._screen = pygame.display.set_mode((kwargs["width"], kwargs["height"]))
+        self.clock = pygame.time.Clock()
         self.kwargs = kwargs
-        if kwargs.get("verbose", False):
-            logger.setLevel(logging.DEBUG)
-        TiledMapParser(kwargs.get("level", "../levels/original.json"), verbose=kwargs.get("verbose", False),
-                       color=kwargs.get("color")).parse(resolution=kwargs["RESOLUTION"])
-        self._stage_screen = pygame.Surface(kwargs["RESOLUTION"])
-        self._stage = GameplayStage(self._stage_screen, verbose=kwargs.get("verbose", False))
+        self.states = {
+            Menu: Menu(self._screen),
+            GameplayStage: GameplayStage(**kwargs)
+        }
+        self._stage = self.states[Menu]
 
     def start(self):
         self._stage.start()
+        while True:
+            try:
+                self.handle_events(pygame.event.get())
+                self.update()
+                self.render()
+                pygame.display.flip()
+                self.clock.tick(60)
+            except KeyboardInterrupt:
+                self.handle_events([pygame.event.Event(pygame.QUIT)])
+                break
+            except Exception as e:
+                print("Error: ", e)
+                break
 
     def update(self):
+        """
+        handles update with delta time accounted
+        """
         self.__current_time = time.time()
         dt = self.__current_time - self.__prev_time
         self._stage.update(dt)
@@ -43,13 +60,12 @@ class Game(metaclass=SingletonMeta):
 
         for event in events:
             self._stage.handle_event(event)
+            if event.type == NEXT_STAGE:
+                self._stage = self.states[self._stage.next()]
+                self._stage.start()
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
     def render(self):
-        self._screen.fill((0, 0, 0))
-        self._stage.render()
-        min_side = min(self.kwargs["width"], self.kwargs["height"])
-        self._screen.blit(pygame.transform.scale(self._stage_screen, (min_side, min_side)),
-                          ((self.kwargs["width"] - min_side) // 2, (self.kwargs["height"] - min_side) // 2))
+        self._stage.render(self._screen)

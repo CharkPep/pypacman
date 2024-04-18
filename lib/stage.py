@@ -14,7 +14,7 @@ class GameStage(ABC):
     def reset(self):
         pass
 
-    def render(self):
+    def render(self, screen):
         pass
 
     def next(self) -> 'GameStage':

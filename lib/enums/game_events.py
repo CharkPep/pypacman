@@ -1,6 +1,7 @@
 import pygame
 
 NEXT_LEVEL = pygame.event.custom_type()
+NEXT_STAGE = pygame.event.custom_type()
 GAME_OVER = pygame.event.custom_type()
 GHOST_EXITED_HOUSE = pygame.event.custom_type()
 POINT_EATEN = pygame.event.custom_type()

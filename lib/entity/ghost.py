@@ -31,9 +31,7 @@ class Ghost(Entity, ABC):
 
     def activate(self):
         self._state = GhostStates.EXITING_HOUSE
-        # self._update_direction()
         self._is_active = True
-        # logger.debug(f"Ghost {self} activated with state {self._state}")
 
     @override
     def reset(self):
@@ -157,7 +155,6 @@ class Ghost(Entity, ABC):
         return False
 
     def _update_direction_EXITING_HOUSE(self):
-        # logger.debug(f"Ghost {self} exiting house, position {self._position}, rect {self.rect.center}.")
         self._target_tile = pygame.Vector2(GameMap().props["entrance_target"])
         self._direction = self._select_best_direction()
         if self._is_ghost_touch_ghost_house_entrance() and self._position != self._target_tile:
@@ -169,7 +166,6 @@ class Ghost(Entity, ABC):
             pygame.event.post(pygame.event.Event(GHOST_EXITED_HOUSE, message=self))
             self._state = GhostStates.IDLE
             self._update_next_state()
-            # self._state = GhostStates.IDLE
 
     def _move(self, dt):
         if self.peek_in_direction(

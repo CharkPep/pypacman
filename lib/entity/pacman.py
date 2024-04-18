@@ -4,6 +4,7 @@ from lib.enums.game_events import POINT_EATEN, PALLET_EATEN
 from lib.entity.entity import Entity
 
 
+# why here??
 def resize_images(images: dict, width: int, height: int) -> dict:
     resized_images = {}
     for key, image in images.items():
@@ -39,15 +40,19 @@ class Pacman(Entity):
     def handle_event(self, event: pygame.event.Event):
         if event.dict.get('key') == pygame.K_UP and event.type == pygame.KEYDOWN:
             self.set_direction(pygame.Vector2(0, -1))
+            # should check direction first, if it changed to the desired or only _change_direction attribute was set
             self.__image = self.__image_dict['up']
         elif event.dict.get('key') == pygame.K_DOWN and event.type == pygame.KEYDOWN:
             self.set_direction(pygame.Vector2(0, 1))
+            # should check direction first, if it changed to the desired or only _change_direction attribute was set
             self.__image = self.__image_dict['down']
         elif event.dict.get('key') == pygame.K_LEFT and event.type == pygame.KEYDOWN:
             self.set_direction(pygame.Vector2(-1, 0))
+            # should check direction first, if it changed to the desired or only _change_direction attribute was set
             self.__image = self.__image_dict['left']
         elif event.dict.get('key') == pygame.K_RIGHT and event.type == pygame.KEYDOWN:
             self.set_direction(pygame.Vector2(1, 0))
+            # should check direction first, if it changed to the desired or only _change_direction attribute was set
             self.__image = self.__image_dict['right']
 
     def render(self, surface: pygame.surface.Surface):

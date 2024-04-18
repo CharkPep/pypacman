@@ -1,12 +1,12 @@
-import time
-
+from lib.map.parser import TiledMapParser
 from lib.stage import GameStage
 from typing import List, Tuple
 from lib.managers.ghost_manager import GhostGroup
 from lib.entity.pacman import Pacman
 from lib.entity.object import GameObject
 from lib.map.map import GameMap
-from lib.enums.game_events import GAME_OVER, NEXT_LEVEL, POINT_EATEN, GHOST_PLAYER_COLLISION
+from lib.enums.game_events import GAME_OVER, NEXT_LEVEL, POINT_EATEN, GHOST_PLAYER_COLLISION, PALLET_EATEN
+from lib.utils.singleton import SingletonMeta
 import pygame
 import logging
 
@@ -20,8 +20,8 @@ class GameplayStage(GameStage):
     _next_state = None
     score: int = 0
 
-    def __init__(self, screen: pygame.surface.Surface, **kwargs):
-        self.screen = screen
+    def __init__(self, **kwargs):
+        TiledMapParser(layers=kwargs.get("map", "./levels/original.json")).parse(kwargs.get("RESOLUTION"))
         self._player = Pacman(**kwargs)
         self.add_entity(self._player)
         self._ghost_group = GhostGroup(self._player, **kwargs)
@@ -29,6 +29,7 @@ class GameplayStage(GameStage):
         self._score = 0
         self._lives = 1
         self._fruits = None
+        self._left_points = GameMap().points
         self.font = pygame.font.SysFont('Comic Sans MS', 30)
         self.kwargs = kwargs
 
@@ -42,16 +43,20 @@ class GameplayStage(GameStage):
     def get_target_fps(cls):
         return 60
 
-    def render(self):
-        GameMap().render(self.screen)
+    def render(self, screen):
+        min_side = min(self.kwargs["width"], self.kwargs["height"])
+        downscaled = pygame.Surface(self.kwargs["RESOLUTION"])
+        GameMap().render(downscaled)
         for entity in self._entities:
-            entity.render(self.screen)
-        self._ghost_group.render(self.screen)
-        self.screen.blit(self.font.render(f"Score: {self.score}", True, (0, 0, 0)), (0, 0))
+            entity.render(downscaled)
+        self._ghost_group.render(downscaled)
+        downscaled.blit(self.font.render(f"Score: {self.score}", True, (0, 0, 0)), (0, 0))
         if self.kwargs.get("verbose", False):
-            self.screen.blit(
+            downscaled.blit(
                 self.font.render(f"Ghosts: {self._ghost_group.get_global_ghost_state()}", True, (0, 0, 0)),
                 (100, 0))
+        screen.blit(pygame.transform.scale(downscaled, (min_side, min_side)),
+                    ((self.kwargs["width"] - min_side) // 2, (self.kwargs["height"] - min_side) // 2))
 
     def update(self, dt: float):
         for entity in self._entities:
@@ -63,6 +68,7 @@ class GameplayStage(GameStage):
         self._ghost_group.start()
 
     def reset(self):
+        self._left_points = GameMap().points
         self._ghost_group.freeze()
         self._player.freeze()
         self._lives -= 1
@@ -76,10 +82,14 @@ class GameplayStage(GameStage):
             self.reset()
         if event.type == POINT_EATEN:
             self.score += 10
-        if event.type == GHOST_PLAYER_COLLISION:
+            self._left_points -= 1
+        if event.type == GHOST_PLAYER_COLLISION or event.type == PALLET_EATEN:
             self.score += 50
+        if self._left_points == 0:
+            self.reset()
         if event.type == NEXT_LEVEL:
             self._ghost_group.next_level()
+            self.reset()
         self._ghost_group.handle_event(event)
         for entity in self._entities:
             entity.handle_event(event)
