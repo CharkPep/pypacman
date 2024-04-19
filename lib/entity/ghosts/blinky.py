@@ -10,8 +10,8 @@ from ...enums.ghost_states import GhostStates
 class Blinky(Ghost):
     COLOR = (255, 0, 0)
 
-    def __init__(self, position, player: Entity):
-        super().__init__(position, 11, player)
+    def __init__(self, position, player: Entity, **kwargs):
+        super().__init__(position, 11, player, **kwargs)
         self.SCATTER_TILE = pygame.Vector2(GameMap().width, 0)
         self.__image = pygame.image.load('assets/ghosts/blinky.png')
 

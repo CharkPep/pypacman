@@ -22,8 +22,9 @@ class Ghost(Entity, ABC):
             position: pygame.Vector2,
             velocity: int,
             target: Entity,
+            **kwargs
     ):
-        super().__init__(position, velocity)
+        super().__init__(position, velocity, **kwargs)
         self._state = GhostStates.IDLE
         self._target = target
         self._is_active = False

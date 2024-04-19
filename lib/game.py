@@ -1,9 +1,11 @@
+import threading
+
 from lib.stage import GameStage
 from lib.utils.singleton import SingletonMeta
 from lib.stages.menu import Menu
 from lib.stages.gameplay import GameplayStage
 from lib.stages.game_over import GameOver
-from lib.enums.game_events import NEXT_STAGE
+from lib.enums.game_events import NEXT_STAGE, FREEZE, UNFREEZE
 import time
 import pygame
 import logging
@@ -14,16 +16,13 @@ logger = logging.getLogger(__name__)
 
 class Game(metaclass=SingletonMeta):
     _stage: GameStage = None
-    __current_time = time.time()
-    __prev_time = __current_time
+    _freeze = None
 
     def __init__(self, **kwargs):
         pygame.init()
         pygame.display.set_caption("Pacman")
         self._screen = pygame.display.set_mode((kwargs["width"], kwargs["height"]))
         self.clock = pygame.time.Clock()
-        self.sound_manager = SoundManager()
-        self.intro_play = True
         self.kwargs = kwargs
         self.states = {
             'Menu': Menu(self._screen),
@@ -43,10 +42,7 @@ class Game(metaclass=SingletonMeta):
                 self.update()
                 self.render()
                 pygame.display.flip()
-                # self.clock.tick(60)
-                if self.intro_play and isinstance(self._stage, GameplayStage):
-                    self.sound_manager.play_sound_sync('beginning')
-                    self.intro_play = False
+                self.clock.tick(60)
             except KeyboardInterrupt:
                 self.handle_events([pygame.event.Event(pygame.QUIT)])
                 break
@@ -58,10 +54,7 @@ class Game(metaclass=SingletonMeta):
         """
         Handles update with delta time accounted
         """
-        self.__current_time = time.time()
-        dt = self.__current_time - self.__prev_time
-        self._stage.update(dt)
-        self.__prev_time = self.__current_time
+        self._stage.update(self.clock.get_time() / 1000)
 
     def handle_events(self, events):
         """
@@ -78,6 +71,10 @@ class Game(metaclass=SingletonMeta):
                     self._stage = self.states[self._stage.next()]
 
                 self._stage.start()
+            if event.type == FREEZE:
+                self._stage.pause()
+            if event.type == UNFREEZE:
+                self._stage.unpause()
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()

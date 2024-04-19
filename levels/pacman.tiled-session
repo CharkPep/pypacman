@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "pacman-map.tsx",
+    "activeFile": "original.json",
     "expandedProjectPaths": [
         "."
     ],
@@ -25,11 +25,11 @@
             }
         },
         "original.json": {
-            "scale": 1,
+            "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 431,
-                "y": 644
+                "x": 598.6666666666667,
+                "y": 491.99999999999994
             }
         },
         "pacman-map.tsx": {
@@ -54,8 +54,8 @@
     "project": "pacman.tiled-project",
     "property.type": "object",
     "recentFiles": [
-        "original.json",
         "pacman-map.tsx",
+        "original.json",
         "pacman.tsx",
         "map.json",
         "/home/pep/Downloads/pacman.tsx"

@@ -27,7 +27,7 @@ class Pacman(Entity):
 
     @override
     def render(self, surface):
-        if self.get_direction() != pygame.Vector2(0, 0):
+        if self._direction != pygame.Vector2(0, 0):
             self.__image = self.__image_dict[(int(self.get_direction().x), int(self.get_direction().y))]
 
         surface.blit(self.__image, self.rect.topleft)
@@ -39,6 +39,9 @@ class Pacman(Entity):
         self.__image = self.__image_dict[(0, 1)]
 
     def update(self, dt: float):
+        if self._is_frozen:
+            return
+
         on_tile = GameMap().get_tile(self._position, layer=1)
         if on_tile.id != 0 and on_tile.kwargs.get("render", False):
             if on_tile.id == GameMap().props["pallet"]:

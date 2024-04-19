@@ -5,7 +5,8 @@ from lib.managers.ghost_manager import GhostGroup
 from lib.entity.pacman import Pacman
 from lib.entity.object import GameObject
 from lib.map.map import GameMap
-from lib.enums.game_events import GAME_OVER, NEXT_LEVEL, POINT_EATEN, GHOST_PLAYER_COLLISION, PALLET_EATEN, NEXT_STAGE
+from lib.enums.game_events import GAME_OVER, NEXT_LEVEL, POINT_EATEN, GHOST_PLAYER_COLLISION, PALLET_EATEN, NEXT_STAGE, \
+    FREEZE, UNFREEZE
 from lib.utils.sound_manager import SoundManager
 import pygame
 import logging
@@ -71,7 +72,18 @@ class GameplayStage(GameStage):
         self.clock.tick(self.get_target_fps())
 
     def start(self):
+        self.sound_manager.play_sound('beginning', freeze=True)
         self._ghost_group.start()
+
+    def pause(self):
+        self._ghost_group.freeze()
+        self._player.freeze()
+        logger.debug("Gameplay was paused")
+
+    def unpause(self):
+        self._ghost_group.unfreeze()
+        self._player.unfreeze()
+        logger.debug("Gameplay was resume")
 
     def reset(self):
         self._ghost_group.freeze()
@@ -102,6 +114,7 @@ class GameplayStage(GameStage):
                 self.sound_manager.play_sound_sync('death')
                 pygame.event.post(pygame.event.Event(NEXT_STAGE))
                 self.restart()
+
             self.sound_manager.play_sound_sync('death')
             self.reset()
         if event.type == POINT_EATEN:
@@ -121,6 +134,7 @@ class GameplayStage(GameStage):
         if event.type == NEXT_LEVEL:
             self._next_level()
         self._ghost_group.handle_event(event)
+        self.sound_manager.handle_event(event)
         for entity in self._entities:
             entity.handle_event(event)
 

@@ -11,6 +11,12 @@ class GameStage(ABC):
     def start(self):
         pass
 
+    def pause(self):
+        pass
+
+    def unpause(self):
+        pass
+
     def reset(self):
         pass
 

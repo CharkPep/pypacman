@@ -12,8 +12,8 @@ class Pinky(Ghost):
     SCATTER_TILE = (0, 0)
     COLOR = (255, 192, 203)
 
-    def __init__(self, position, player: Entity):
-        super().__init__(position, 11, player)
+    def __init__(self, position, player: Entity, **kwargs):
+        super().__init__(position, 11, player, **kwargs)
         self._player = player
         self._target_tile = None
         self.SCATTER_TILE = pygame.Vector2(1, 1)

@@ -10,8 +10,8 @@ import math, pygame
 class Clyde(Ghost):
     COLOR = (255, 255, 0)
 
-    def __init__(self, position, player: Entity):
-        super().__init__(position, 11, player)
+    def __init__(self, position, player: Entity, **kwargs):
+        super().__init__(position, 11, player, **kwargs)
         self._player = player
         self._target_tile = None
         self.SCATTER_TILE = pygame.Vector2(0, GameMap().height)
