@@ -36,7 +36,7 @@ class Pacman(Entity):
     @override
     def reset(self):
         super().reset()
-        self.__image = self.__image_dict['right']
+        self.__image = self.__image_dict[(0, 1)]
 
     def update(self, dt: float):
         on_tile = GameMap().get_tile(self._position, layer=1)
