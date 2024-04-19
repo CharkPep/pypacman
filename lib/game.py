@@ -6,6 +6,7 @@ from lib.enums.game_events import NEXT_STAGE
 import time
 import pygame
 import logging
+from lib.utils.sound_manager import SoundManager
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +21,8 @@ class Game(metaclass=SingletonMeta):
         pygame.display.set_caption("Pacman")
         self._screen = pygame.display.set_mode((kwargs["width"], kwargs["height"]))
         self.clock = pygame.time.Clock()
+        self.sound_manager = SoundManager()
+        self.intro_play = True
         self.kwargs = kwargs
         self.states = {
             Menu: Menu(self._screen),
@@ -39,6 +42,9 @@ class Game(metaclass=SingletonMeta):
                 self.render()
                 pygame.display.flip()
                 self.clock.tick(60)
+                if self.intro_play and isinstance(self._stage, GameplayStage):
+                    self.sound_manager.play_sound_sync('beginning')
+                    self.intro_play = False
             except KeyboardInterrupt:
                 self.handle_events([pygame.event.Event(pygame.QUIT)])
                 break

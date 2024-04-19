@@ -28,6 +28,8 @@ class Ghost(Entity, ABC):
         self._target = target
         self._is_active = False
         self._next_state = None
+        self._frightened_image = pygame.image.load('assets/ghosts/frightened.png')
+        self._dead_image = pygame.image.load('assets/ghosts/dead.png')
 
     def activate(self):
         self._state = GhostStates.EXITING_HOUSE

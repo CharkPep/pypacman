@@ -6,6 +6,7 @@ from lib.entity.pacman import Pacman
 from lib.entity.object import GameObject
 from lib.map.map import GameMap
 from lib.enums.game_events import GAME_OVER, NEXT_LEVEL, POINT_EATEN, GHOST_PLAYER_COLLISION, PALLET_EATEN
+from lib.utils.sound_manager import SoundManager
 from lib.utils.singleton import SingletonMeta
 import pygame
 import logging
@@ -24,12 +25,13 @@ class GameplayStage(GameStage):
         TiledMapParser(layers=kwargs.get("map", "./levels/original.json")).parse(kwargs.get("RESOLUTION"))
         self._player = Pacman(**kwargs)
         self.add_entity(self._player)
-        self._ghost_group = GhostGroup(self._player, 1, **kwargs)
+        self._ghost_group = GhostGroup(self._player, levels=1, **kwargs)
         self.clock = pygame.time.Clock()
         self._score = 0
         self._lives = 3
         self._fruits = None
         self._left_points = GameMap().points
+        self.sound_manager = SoundManager()
         self.font = pygame.font.SysFont('Comic Sans MS', 30)
         self.kwargs = kwargs
 
@@ -68,9 +70,6 @@ class GameplayStage(GameStage):
         self._ghost_group.start()
 
     def reset(self):
-        if self._lives <= 0:
-            GameMap().reset()
-            self._lives = 3
         self._ghost_group.freeze()
         self._player.freeze()
         self._lives -= 1
@@ -80,12 +79,24 @@ class GameplayStage(GameStage):
 
     def handle_event(self, event):
         if event.type == GAME_OVER:
+            if self._lives <= 0:
+                # DRAW GAME OVER
+                self._lives = 3
+                self.sound_manager.play_sound_sync('death')
+                # -> TO MAIN MENU
+            self.sound_manager.play_sound_sync('death')
             self.reset()
         if event.type == POINT_EATEN:
+            self.sound_manager.play_sound('chomp')
             self.score += 10
             self._left_points -= 1
-        if event.type == GHOST_PLAYER_COLLISION or event.type == PALLET_EATEN:
+        if event.type == PALLET_EATEN:
+            self.sound_manager.play_sound('chomp')
             self.score += 50
+        if event.type == GHOST_PLAYER_COLLISION:
+            self.sound_manager.stop_sound()
+            self.sound_manager.play_sound('eat_ghost')
+            self.score += 200
         if self._left_points == 0:
             self.reset()
         if event.type == NEXT_LEVEL:

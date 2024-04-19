@@ -3,6 +3,7 @@ from lib.map.map import GameMap
 from ..entity import Entity
 import pygame
 import math
+from ...enums.ghost_states import GhostStates
 
 
 # Red
@@ -23,8 +24,15 @@ class Blinky(Ghost):
         pass
 
     def render(self, surface: pygame.surface.Surface):
-        image_rect = self.__image.get_rect(topleft=self.rect.topleft)
-        surface.blit(self.__image, image_rect)
+        if self._state == GhostStates.DEAD:
+            image_rect = self._dead_image.get_rect(topleft=self.rect.topleft)
+            surface.blit(self._dead_image, image_rect)
+        elif self._state == GhostStates.FRIGHTENED:
+            image_rect = self._frightened_image.get_rect(topleft=self.rect.topleft)
+            surface.blit(self._frightened_image, image_rect)
+        else:
+            image_rect = self.__image.get_rect(topleft=self.rect.topleft)
+            surface.blit(self.__image, image_rect)
 
         pygame.draw.circle(surface, self.COLOR, GameMap().get_tile(self._position).rect.center, 5)
         if self._target_tile is not None:
