@@ -12,11 +12,10 @@ logger = logging.getLogger(__name__)
 class Menu(GameStage):
 
     def __init__(self, screen: pygame.Surface):
+        # TODO move to a separate button stack e.g CenteredButtonsStack, LeftButtonsStack
         font_size = int(0.2 * min(*screen.get_size()))
         mx_text_size = pygame.font.Font(None, font_size).size("Quite")
-        logger.debug(f"text max size {mx_text_size}")
         logo = pygame.image.load("./assets/logo.png")
-        logger.debug(mx_text_size[0] / logo.get_width())
         logo = pygame.transform.scale_by(logo, mx_text_size[0] / logo.get_width() * 2)
         center = pygame.rect.Rect(
             (screen.get_rect().centerx - mx_text_size[0] // 2, screen.get_rect().centery - mx_text_size[1]),
@@ -64,4 +63,4 @@ class Menu(GameStage):
         self._buttons.reset()
 
     def next(self) -> 'GameStage':
-        return GameplayStage
+        return 'GameplayStage'

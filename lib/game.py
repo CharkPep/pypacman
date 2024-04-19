@@ -2,6 +2,7 @@ from lib.stage import GameStage
 from lib.utils.singleton import SingletonMeta
 from lib.stages.menu import Menu
 from lib.stages.gameplay import GameplayStage
+from lib.stages.game_over import GameOver
 from lib.enums.game_events import NEXT_STAGE
 import time
 import pygame
@@ -25,13 +26,14 @@ class Game(metaclass=SingletonMeta):
         self.intro_play = True
         self.kwargs = kwargs
         self.states = {
-            Menu: Menu(self._screen),
-            GameplayStage: GameplayStage(**kwargs)
+            'Menu': Menu(self._screen),
+            'GameplayStage': GameplayStage(**kwargs),
+            'GameOver': GameOver(self._screen)
         }
 
-        self._stage = self.states[Menu]
+        self._stage = self.states['Menu']
         if kwargs.get("debug", False):
-            self._stage = self.states[GameplayStage]
+            self._stage = self.states['GameplayStage']
 
     def start(self):
         self._stage.start()
@@ -41,7 +43,7 @@ class Game(metaclass=SingletonMeta):
                 self.update()
                 self.render()
                 pygame.display.flip()
-                self.clock.tick(60)
+                # self.clock.tick(60)
                 if self.intro_play and isinstance(self._stage, GameplayStage):
                     self.sound_manager.play_sound_sync('beginning')
                     self.intro_play = False
@@ -70,11 +72,16 @@ class Game(metaclass=SingletonMeta):
         for event in events:
             self._stage.handle_event(event)
             if event.type == NEXT_STAGE:
-                self._stage = self.states[self._stage.next()]
+                if "stage" in event.__dict__:
+                    self._stage = self.states[event.__dict__["stage"]]
+                else:
+                    self._stage = self.states[self._stage.next()]
+
                 self._stage.start()
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
     def render(self):
+        self._screen.fill((0, 0, 0))
         self._stage.render(self._screen)

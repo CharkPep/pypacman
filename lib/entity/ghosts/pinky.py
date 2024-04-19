@@ -38,7 +38,7 @@ class Pinky(Ghost):
             image_rect = self.__image.get_rect(topleft=self.rect.topleft)
             surface.blit(self.__image, image_rect)
 
-        if self._target_tile is not None:
+        if self._target_tile is not None and self.kwargs.get("verbose", False):
             pygame.draw.circle(surface, self.COLOR,
                                GameMap().get_tile(self._target_tile).rect.center, 5)
 

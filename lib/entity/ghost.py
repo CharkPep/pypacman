@@ -51,7 +51,7 @@ class Ghost(Entity, ABC):
 
     def set_state(self, state):
         self._next_state = state
-        if self._state != state:
+        if self._state != state and self._state != GhostStates.DEAD:
             self.set_direction(-self._direction)
 
     def peek_and_assert_tile(self, tile, direction: pygame.Vector2) -> bool:
@@ -116,7 +116,8 @@ class Ghost(Entity, ABC):
         return self.peek_in_direction(-self._direction)
 
     def _update_next_state(self):
-        if self._next_state is not None and self._state != GhostStates.EXITING_HOUSE:
+        if self._next_state is not None and (
+                self._state != GhostStates.EXITING_HOUSE and self._state != GhostStates.DEAD):
             logger.debug(f"Ghost {self} state set to {self._next_state} from {self._state}")
             self._state = self._next_state
             if self._peek_back():
@@ -147,7 +148,8 @@ class Ghost(Entity, ABC):
         self._target_tile = pygame.Vector2(GameMap().props["entrance_target"])
         self.set_direction(self._select_best_direction())
         if self._position == self._target_tile:
-            self.set_state(GhostStates.SCATTER)
+            self._state = GhostStates.SCATTER
+            # self.set_state(GhostStates.SCATTER)
 
     def _is_ghost_touch_ghost_house_entrance(self):
         entrance_id = GameMap().props["entrance"]

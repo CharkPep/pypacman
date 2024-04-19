@@ -1,5 +1,8 @@
+import logging
 import threading
 import pygame
+
+logger = logging.getLogger(__name__)
 
 
 class SoundManager:
@@ -21,7 +24,7 @@ class SoundManager:
                 self.current_sound_thread = threading.Thread(target=self._play_sound_thread, args=(sound_name,))
                 self.current_sound_thread.start()
         else:
-            print("Error: Sound not found.")
+            logger.debug("Error: Sound not found.")
 
     def play_sound_sync(self, sound_name):
         if sound_name in self.sound_effects:
@@ -29,6 +32,10 @@ class SoundManager:
             length_in_ms = int(sound.get_length() * 1000)
             sound.play()
             pygame.time.wait(length_in_ms)
+
+    def handle_event(self, event):
+        if event.type == pygame.QUIT:
+            self.current_sound_thread.cancel()
 
     def stop_sound(self):
         pygame.mixer.stop()
