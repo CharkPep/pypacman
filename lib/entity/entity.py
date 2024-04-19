@@ -52,7 +52,7 @@ class Entity(GameObject, ABC):
 
     def set_direction(self, direction: pygame.Vector2):
         # Can not really change direction if the entity is not in the middle (close to) of a tile
-        if direction is not self._direction:
+        if direction != self._direction and direction != self._change_direction:
             self._change_direction = direction
 
     def get_direction(self):

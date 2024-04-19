@@ -33,10 +33,10 @@ class GhostGroup(pygame.sprite.Group):
             self._global_activation_time = data["activation_time"]
             self._global_chase_time = data["chase_duration"]
             self._global_scatter_time = data["scatter_duration"]
-            blinky = Blinky(pygame.Vector2(data["blinky_spawn"]), player)
-            pinky = Pinky(pygame.Vector2(data["pinky_spawn"]), player)
-            inky = Inky(pygame.Vector2(data["inky_spawn"]), player, blinky)
-            clyde = Clyde(pygame.Vector2(data["clyde_spawn"]), player)
+            blinky = Blinky(pygame.Vector2(data["blinky_spawn"]), player, **kwargs)
+            pinky = Pinky(pygame.Vector2(data["pinky_spawn"]), player, **kwargs)
+            inky = Inky(pygame.Vector2(data["inky_spawn"]), player, blinky, **kwargs)
+            clyde = Clyde(pygame.Vector2(data["clyde_spawn"]), player, **kwargs)
             blinky.set_state(GhostStates.IDLE)
         # determine the activation order corresponding to the timeouts
         self.add(blinky, pinky, inky, clyde)

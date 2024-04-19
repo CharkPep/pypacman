@@ -13,8 +13,8 @@ class Inky(Ghost):
     COLOR = (0, 0, 255)
     _vector_to_blinky = None
 
-    def __init__(self, position, player: Entity, blinky: Entity):
-        super().__init__(position, 11, player)
+    def __init__(self, position, player: Entity, blinky: Entity, **kwargs):
+        super().__init__(position, 11, player, **kwargs)
         self._player = player
         self._target_tile: Union[pygame.Vector2, None] = None
         self._blinky = blinky
