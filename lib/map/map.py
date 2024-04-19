@@ -23,7 +23,7 @@ class GameMap(metaclass=SingletonMeta):
         self.height = props["height"]
         self.points = 0
         for tile in self.layers[1]:
-            if tile.id != 0:
+            if tile.id == 39 or tile.id == 40:
                 self.points += 1
 
     def reset(self):

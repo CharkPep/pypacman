@@ -19,6 +19,8 @@ class GhostGroup(pygame.sprite.Group):
     _is_ghost_exited_house = False
     _frightened_state_timer = None
     _activation_timer = None
+    _chase_time = None
+    _scatter_time = None
 
     def __init__(self, player, ghost_props="./levels/ghosts.json", level=1, **kwargs):
         super().__init__()
@@ -28,23 +30,25 @@ class GhostGroup(pygame.sprite.Group):
         self._player = player
         with open(ghost_props) as file:
             data = json.load(file)
-            self._chase_time = cycle(iter(data["chase_duration"][str(self._level)]))
-            self._scatter_time = cycle(iter(data["scatter_duration"][str(self._level)]))
+            self._global_activation_time = data["activation_time"]
+            self._global_chase_time = data["chase_duration"]
+            self._global_scatter_time = data["scatter_duration"]
             blinky = Blinky(pygame.Vector2(data["blinky_spawn"]), player)
             pinky = Pinky(pygame.Vector2(data["pinky_spawn"]), player)
             inky = Inky(pygame.Vector2(data["inky_spawn"]), player, blinky)
             clyde = Clyde(pygame.Vector2(data["clyde_spawn"]), player)
             blinky.set_state(GhostStates.IDLE)
-            self._activation_time = cycle(iter(data["activation_time"][str(self._level)]))
         # determine the activation order corresponding to the timeouts
         self.add(blinky, pinky, inky, clyde)
         self._is_frozen = False
-        # self.add(blinky)
 
     def start(self):
+        logger.debug("Starting game.")
+        self._chase_time = cycle(iter(self._global_chase_time[str(min(self._level, 5))]))
+        self._scatter_time = cycle(iter(self._global_scatter_time[str(min(self._level, 5))]))
+        self._activation_time = cycle(iter(self._global_activation_time[str(min(self._level, 5))]))
         self._activation_timer = threading.Timer(next(self._activation_time), self._active_ghosts_with_timeout,
                                                  args=[iter(self.sprites()), self._activation_time])
-        logger.debug("Start activation timer.")
         self._activation_timer.start()
 
     def freeze(self):
@@ -66,6 +70,7 @@ class GhostGroup(pygame.sprite.Group):
 
     def next_level(self):
         self._level += 1
+        self.reset()
 
     def update(self, dt):
         for ghost in self.sprites():

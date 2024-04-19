@@ -43,13 +43,14 @@ class Inky(Ghost):
             image_rect = self.__image.get_rect(topleft=self.rect.topleft)
             surface.blit(self.__image, image_rect)
 
-        if self._target_tile is not None:
+        if self._target_tile is not None and self.kwargs.get("verbose", False):
             pygame.draw.circle(surface, self.COLOR,
                                GameMap().get_tile(self._target_tile).rect.center, 5)
-        # if self._vector_to_blinky is not None and self._state == GhostStates.CHASE:
-        #     pygame.draw.line(surface, self.COLOR,
-        #                      GameMap().get_tile(self._vector_to_blinky[0]).rect.center,
-        #                      GameMap().get_tile(self._vector_to_blinky[1]).rect.center, 1)
+        if self._vector_to_blinky is not None and self._state == GhostStates.CHASE and self.kwargs.get("verbose",
+                                                                                                       False):
+            pygame.draw.line(surface, self.COLOR,
+                             GameMap().get_tile(self._vector_to_blinky[0]).rect.center,
+                             GameMap().get_tile(self._vector_to_blinky[1]).rect.center, 1)
 
     def _get_tile_in_front_of_player(self, tiles: int) -> pygame.Vector2:
         return self._player.get_position() + self._player.get_direction() * tiles
