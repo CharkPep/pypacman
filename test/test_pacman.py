@@ -9,10 +9,11 @@ class TestPacman:
         (pygame.Vector2(1, 1), pygame.Vector2(1, 0), 1, 11, 1, pygame.Vector2(2, 1)),
         (pygame.Vector2(1, 1), pygame.Vector2(1, 0), 1, 11, 1, pygame.Vector2(2, 1))
     ])
-    def test_move_pacman(self, spawn, frames, target_fps, direction, expected_position):
+    def test_move_pacman(self, spawn, direction, target_fps, speed, frames, expected):
         pacman = Pacman(spawn=spawn)
         pacman.set_direction(direction)
         for _ in range(frames):
             pacman.update(1)
 
-        assert (pacman.get_position(), expected_position)
+        assert (pacman.get_position(), expected)
+
