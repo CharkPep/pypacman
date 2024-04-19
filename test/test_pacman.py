@@ -15,5 +15,4 @@ class TestPacman:
         for _ in range(frames):
             pacman.update(1)
 
-        assert (pacman.get_position(), expected)
-
+        assert pacman.get_position(), expected
