@@ -84,8 +84,10 @@ class GhostGroup(pygame.sprite.Group):
                     pygame.event.post(pygame.event.Event(GHOST_PLAYER_COLLISION, message=ghost))
                 else:
                     logger.debug("Player collided with ghost.")
-                    self._frightened_state_timer.cancel()
-                    self._activation_timer.cancel()
+                    if self._frightened_state_timer is not None:
+                        self._frightened_state_timer.cancel()
+                    if self._activation_timer is not None:
+                        self._activation_timer.cancel()
                     pygame.event.post(pygame.event.Event(GAME_OVER, message=ghost))
 
     def render(self, screen):

@@ -1,5 +1,5 @@
 import os
-
+from lib.entity.pacman import Pacman
 import pygame
 from lib.map.parser import TiledMapParser
 from lib.map.map import GameMap
@@ -13,8 +13,9 @@ def initialize_pygame():
     pygame.quit()
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True, scope="function")
 def map():
+    print("Map created")
     current_dir = os.path.dirname(os.path.realpath(__file__))
     os.chdir(os.path.join(current_dir, ".."))
     TiledMapParser(layers="./levels/original.json").parse((800, 800))
