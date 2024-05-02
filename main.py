@@ -11,7 +11,7 @@ app.add_argument("-w", "--width", default=1000, help="width of the image", type=
 app.add_argument("-he", "--height", default=1000, help="height of the image", type=int)
 app.add_argument('-l', '--map', default="levels/original.json", help="level file", type=str)
 app.add_argument("-v", "--verbose", default=False, action="store_true", help="increase output verbosity")
-app.add_argument("-c", "--color", default="blue", help="background color", type=str)
+app.add_argument("-c", "--color", default="white", help="background color", type=str)
 app.add_argument("-d", "--debug", default=False, action="store_true",
                  help="debug mode, start gameplay stage first")
 args = vars(app.parse_args())

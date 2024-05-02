@@ -22,7 +22,7 @@ class GameplayStage(GameStage):
     score: int = 0
 
     def __init__(self, **kwargs):
-        TiledMapParser(layers=kwargs.get("map", "./levels/original.json")).parse(kwargs.get("RESOLUTION"))
+        TiledMapParser(layers=kwargs.get("map", "./levels/original.json"), **kwargs).parse(kwargs.get("RESOLUTION"))
         self._player = Pacman(**kwargs)
         self.add_entity(self._player)
         self._ghost_group = GhostGroup(self._player, levels=1, **kwargs)
