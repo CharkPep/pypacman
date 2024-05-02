@@ -22,26 +22,22 @@ class SoundManager(metaclass=SingletonMeta):
         self.current_sound_thread = None
         self.freeze_timer = None
 
-    def play_sound(self, sound_name, freeze=False):
+    def play_sound(self, sound_name, finalizer=None):
         if sound_name in self.sound_effects:
             if not self.sound_playing:
                 self.sound_playing = True
-                self.current_sound_thread = threading.Thread(target=self._play_sound_async, args=(sound_name, freeze))
+                self.current_sound_thread = threading.Thread(target=self._play_sound_async,
+                                                             args=(sound_name, finalizer))
                 self.current_sound_thread.start()
         else:
             logger.debug("Error: Sound not found.")
-
-    def play_sound_sync(self, sound_name):
-        if sound_name in self.sound_effects:
-            sound = self.sound_effects[sound_name]
-            length_in_ms = int(sound.get_length() * 1000)
-            sound.play()
-            pygame.time.wait(length_in_ms)
 
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             if self.current_sound_thread is not None:
                 self.current_sound_thread.join()
+            if self.wait_thread is not None:
+                self.wait_thread.join()
             if self.freeze_timer is not None:
                 self.freeze_timer.cancel()
 
@@ -49,21 +45,16 @@ class SoundManager(metaclass=SingletonMeta):
         pygame.mixer.stop()
         self.sound_playing = False
 
-    def _play_sound_async(self, sound_name, freeze=True):
+    def _play_sound_async(self, sound_name, finalizer=None):
         self.current_sound_name = sound_name
-        if freeze:
-            logger.debug(f"Playing track {sound_name} for {self.sound_effects[sound_name].get_length()} sec.")
-            pygame.event.post(pygame.event.Event(FREEZE))
         self.sound_effects[sound_name].play()
+        logger.debug(f"Play sound {sound_name} for {self.sound_effects[sound_name].get_length()}")
         self.wait_thread = threading.Thread(target=self._wait_till_end,
-                                            args=[self.sound_effects[sound_name].get_length(), freeze])
+                                            args=[self.sound_effects[sound_name].get_length(), finalizer])
         self.wait_thread.start()
 
-    def _wait_till_end(self, wait, unfreeze=False):
+    def _wait_till_end(self, wait, finalizer=None):
         time.sleep(wait)
-        self._finish_playing(unfreeze)
-
-    def _finish_playing(self, unfreeze=False):
-        if unfreeze:
-            pygame.event.post(pygame.event.Event(UNFREEZE))
+        if finalizer is not None:
+            finalizer()
         self.sound_playing = False

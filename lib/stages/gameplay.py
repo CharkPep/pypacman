@@ -6,7 +6,7 @@ from lib.entity.pacman import Pacman
 from lib.entity.object import GameObject
 from lib.map.map import GameMap
 from lib.enums.game_events import GAME_OVER, NEXT_LEVEL, POINT_EATEN, GHOST_PLAYER_COLLISION, PALLET_EATEN, NEXT_STAGE, \
-    FREEZE, UNFREEZE
+    FREEZE, UNFREEZE, RESET, RESTART
 from lib.utils.sound_manager import SoundManager
 import pygame
 import logging
@@ -72,7 +72,8 @@ class GameplayStage(GameStage):
         self.clock.tick(self.get_target_fps())
 
     def start(self):
-        self.sound_manager.play_sound('beginning', freeze=True)
+        pygame.event.post(pygame.event.Event(FREEZE))
+        self.sound_manager.play_sound('beginning', lambda: self.postEvents([UNFREEZE]))
         self._ghost_group.start()
 
     def pause(self):
@@ -107,16 +108,27 @@ class GameplayStage(GameStage):
         GameMap().reset()
         self.reset()
 
+    def postEvents(self, events):
+        for event in events:
+            pygame.event.post(pygame.event.Event(event))
+
     def handle_event(self, event):
+        if event.type == RESET:
+            self.reset()
+        if event.type == RESTART:
+            self.restart()
         if event.type == GAME_OVER:
+            self._ghost_group.freeze()
             if self._lives == 0:
                 self._lives = 3
-                self.sound_manager.play_sound_sync('death')
+                pygame.event.post(pygame.event.Event(FREEZE))
+                self.sound_manager.stop_sound()
+                self.sound_manager.play_sound('death', lambda: self.postEvents([RESTART, UNFREEZE]))
                 pygame.event.post(pygame.event.Event(NEXT_STAGE))
-                self.restart()
 
-            self.sound_manager.play_sound_sync('death')
-            self.reset()
+            pygame.event.post(pygame.event.Event(FREEZE))
+            self.sound_manager.stop_sound()
+            self.sound_manager.play_sound('death', lambda: self.postEvents([RESET, UNFREEZE]))
         if event.type == POINT_EATEN:
             self.sound_manager.play_sound('chomp')
             self.score += 10
