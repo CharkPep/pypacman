@@ -44,6 +44,7 @@ class GhostGroup(pygame.sprite.Group):
 
     def start(self):
         logger.debug("Starting game.")
+        self._is_frozen = False
         self._chase_time = cycle(iter(self._global_chase_time[str(min(self._level, 5))]))
         self._scatter_time = cycle(iter(self._global_scatter_time[str(min(self._level, 5))]))
         self._activation_time = cycle(iter(self._global_activation_time[str(min(self._level, 5))]))
@@ -52,16 +53,19 @@ class GhostGroup(pygame.sprite.Group):
         self._activation_timer.start()
 
     def freeze(self):
+        self._is_frozen = True
         for ghost in self.sprites():
             ghost.freeze()
 
     def unfreeze(self):
+        self._is_frozen = False
         for ghost in self.sprites():
             ghost.unfreeze()
 
     def reset(self):
         for sprite in self.sprites():
             sprite.reset()
+        self._is_frozen = False
         self._global_ghost_state = GhostStates.EXITING_HOUSE
         self._is_ghost_exited_house = False
         self._frightened_state_timer.cancel()
@@ -73,6 +77,8 @@ class GhostGroup(pygame.sprite.Group):
         self.reset()
 
     def update(self, dt):
+        if self._is_frozen:
+            return
         for ghost in self.sprites():
             ghost.update(dt)
         for ghost in self.sprites():
