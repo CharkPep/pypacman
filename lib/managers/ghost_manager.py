@@ -1,5 +1,4 @@
 import json
-import logging
 from lib.enums.ghost_states import GhostStates
 from lib.entity.ghosts.blinky import Blinky
 from lib.entity.ghosts.pinky import Pinky

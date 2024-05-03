@@ -2,7 +2,6 @@ from ..ghost import Ghost
 from lib.map.map import GameMap
 from ..entity import Entity
 import pygame
-import math
 from typing_extensions import override
 from typing import Union
 from lib.enums.ghost_states import GhostStates

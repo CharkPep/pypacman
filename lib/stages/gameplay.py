@@ -1,12 +1,11 @@
 from lib.map.parser import TiledMapParser
 from lib.stage import GameStage
-from typing import List, Tuple
+from typing import List
 from lib.managers.ghost_manager import GhostGroup
 from lib.entity.pacman import Pacman
 from lib.entity.object import GameObject
 from lib.map.map import GameMap
-from lib.enums.game_events import GAME_OVER, NEXT_LEVEL, POINT_EATEN, GHOST_PLAYER_COLLISION, PALLET_EATEN, NEXT_STAGE, \
-    FREEZE, UNFREEZE
+from lib.enums.game_events import GAME_OVER, NEXT_LEVEL, POINT_EATEN, GHOST_PLAYER_COLLISION, PALLET_EATEN, NEXT_STAGE
 from lib.utils.sound_manager import SoundManager
 import pygame
 import logging

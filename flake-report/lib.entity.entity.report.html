@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: lib/entity/entity.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="lib.entity.entity.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               lib/entity/entity.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="E501">
+               <span class="count sev-2">
+                  13
+               </span>
+               <strong>E501:</strong> line too long (91 > 79 characters)
+               
+                  (and 10 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Line too long (91 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l16">
+                  <tt><i>16</i> <span class="sd">        Entity base abstract class describes the basic movement and properties of an entity</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (87 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l20">
+                  <tt><i>20</i>     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Vector2</span><span class="p">,</span> <span class="n">VELOCITY</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">TARGET_FPS</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (97 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l54">
+                  <tt><i>54</i>         <span class="c1"># Can not really change direction if the entity is not in the middle (close to) of a tile</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (80 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l55">
+                  <tt><i>55</i>         <span class="k">if</span> <span class="n">direction</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="ow">and</span> <span class="n">direction</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_change_direction</span><span class="p">:</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (103 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l70">
+                  <tt><i>70</i>         <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">dist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">direction_tile</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_velocity</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">TARGET_FPS</span><span class="p">:</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (105 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l71">
+                  <tt><i>71</i>             <span class="c1"># entities can wrap around the map, so we add the width and height of the map to the position</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (107 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l72">
+                  <tt><i>72</i>             <span class="c1"># and then take the modulo of the width and height to get the new position, this garanties that</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (94 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l74">
+                  <tt><i>74</i>             <span class="c1"># For example map width = 10, height = 10, position = (10, 10), direction = (1, 1)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (83 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l78">
+                  <tt><i>78</i>             <span class="n">direction_position</span> <span class="o">+=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Vector2</span><span class="p">(</span><span class="n">GameMap</span><span class="p">()</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">GameMap</span><span class="p">()</span><span class="o">.</span><span class="n">height</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (87 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l79">
+                  <tt><i>79</i>             <span class="n">direction_position</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Vector2</span><span class="p">(</span><span class="n">direction_position</span><span class="o">.</span><span class="n">x</span> <span class="o">%</span> <span class="n">GameMap</span><span class="p">()</span><span class="o">.</span><span class="n">width</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (88 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l80">
+                  <tt><i>80</i>                                                 <span class="n">direction_position</span><span class="o">.</span><span class="n">y</span> <span class="o">%</span> <span class="n">GameMap</span><span class="p">()</span><span class="o">.</span><span class="n">height</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (83 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l90">
+                  <tt><i>90</i>         <span class="c1"># as is_intersection returns if there is 2 walkable tiles around the entity</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (109 > 79 characters):</p>
+               
+               <a href="lib.entity.entity.source.html#l92">
+                  <tt><i>92</i>         <span class="k">if</span> <span class="n">is_intersection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_change_direction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">peek_in_direction</span><span class="p">(</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

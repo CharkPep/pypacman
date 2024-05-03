@@ -1,8 +1,5 @@
 import logging
-
 import pygame
-from typing_extensions import override
-
 from lib.map.map import GameMap
 from lib.enums.game_events import POINT_EATEN, PALLET_EATEN
 from lib.entity.entity import Entity

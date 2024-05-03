@@ -1,7 +1,7 @@
 from abc import ABC
 from .object import GameObject
 import logging
-from lib.utils.map import *
+from lib.utils.map import GameMap, is_walkable, is_intersection
 import pygame
 import math
 

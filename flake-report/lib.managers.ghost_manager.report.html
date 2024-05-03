@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: lib/managers/ghost_manager.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="lib.managers.ghost_manager.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               lib/managers/ghost_manager.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="E501">
+               <span class="count sev-2">
+                  18
+               </span>
+               <strong>E501:</strong> line too long (101 > 79 characters)
+               
+                  (and 14 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Line too long (101 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l7">
+                  <tt><i>7</i> <span class="kn">from</span> <span class="nn">lib.enums.game_events</span> <span class="kn">import</span> <span class="n">GHOST_EXITED_HOUSE</span><span class="p">,</span> <span class="n">PALLET_EATEN</span><span class="p">,</span> <span class="n">GHOST_PLAYER_COLLISION</span><span class="p">,</span> <span class="n">GAME_OVER</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (86 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l24">
+                  <tt><i>24</i>     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">ghost_props</span><span class="o">=</span><span class="s2">&quot;./levels/ghosts.json&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (83 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l35">
+                  <tt><i>35</i>             <span class="n">blinky</span> <span class="o">=</span> <span class="n">Blinky</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">Vector2</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;blinky_spawn&quot;</span><span class="p">]),</span> <span class="n">player</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (80 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l36">
+                  <tt><i>36</i>             <span class="n">pinky</span> <span class="o">=</span> <span class="n">Pinky</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">Vector2</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;pinky_spawn&quot;</span><span class="p">]),</span> <span class="n">player</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (85 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l37">
+                  <tt><i>37</i>             <span class="n">inky</span> <span class="o">=</span> <span class="n">Inky</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">Vector2</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;inky_spawn&quot;</span><span class="p">]),</span> <span class="n">player</span><span class="p">,</span> <span class="n">blinky</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (80 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l38">
+                  <tt><i>38</i>             <span class="n">clyde</span> <span class="o">=</span> <span class="n">Clyde</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">Vector2</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;clyde_spawn&quot;</span><span class="p">]),</span> <span class="n">player</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (89 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l46">
+                  <tt><i>46</i>         <span class="bp">self</span><span class="o">.</span><span class="n">_chase_time</span> <span class="o">=</span> <span class="n">cycle</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_global_chase_time</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_level</span><span class="p">,</span> <span class="mi">5</span><span class="p">))]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (93 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l47">
+                  <tt><i>47</i>         <span class="bp">self</span><span class="o">.</span><span class="n">_scatter_time</span> <span class="o">=</span> <span class="n">cycle</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_global_scatter_time</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_level</span><span class="p">,</span> <span class="mi">5</span><span class="p">))]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (99 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l48">
+                  <tt><i>48</i>         <span class="bp">self</span><span class="o">.</span><span class="n">_activation_time</span> <span class="o">=</span> <span class="n">cycle</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_global_activation_time</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_level</span><span class="p">,</span> <span class="mi">5</span><span class="p">))]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (111 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l49">
+                  <tt><i>49</i>         <span class="bp">self</span><span class="o">.</span><span class="n">_activation_timer</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_activation_time</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_ghosts_with_timeout</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (100 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l50">
+                  <tt><i>50</i>                                                  <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sprites</span><span class="p">()),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_activation_time</span><span class="p">])</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (105 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l78">
+                  <tt><i>78</i>             <span class="k">if</span> <span class="n">ghost</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="o">!=</span> <span class="n">GhostStates</span><span class="o">.</span><span class="n">DEAD</span> <span class="ow">and</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">collide_rect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="p">,</span> <span class="n">ghost</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (96 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l83">
+                  <tt><i>83</i>                     <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GHOST_PLAYER_COLLISION</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">ghost</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (83 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l90">
+                  <tt><i>90</i>                     <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">GAME_OVER</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">ghost</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (82 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l112">
+                  <tt><i>112</i>             <span class="bp">self</span><span class="o">.</span><span class="n">_frightened_state_timer</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_chase</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (117 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l125">
+                  <tt><i>125</i>             <span class="bp">self</span><span class="o">.</span><span class="n">_activation_timer</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">timer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_ghosts_with_timeout</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ghosts</span><span class="p">,</span> <span class="n">timeout</span><span class="p">])</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (93 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l140">
+                  <tt><i>140</i>                 <span class="bp">self</span><span class="o">.</span><span class="n">_frightened_state_timer</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">timeout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_scatter</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (87 > 79 characters):</p>
+               
+               <a href="lib.managers.ghost_manager.source.html#l150">
+                  <tt><i>150</i>             <span class="bp">self</span><span class="o">.</span><span class="n">_frightened_state_timer</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="n">timeout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_chase</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

@@ -1,15 +1,11 @@
-import threading
-
 from lib.stage import GameStage
 from lib.utils.singleton import SingletonMeta
 from lib.stages.menu import Menu
 from lib.stages.gameplay import GameplayStage
 from lib.stages.game_over import GameOver
 from lib.enums.game_events import NEXT_STAGE, FREEZE, UNFREEZE
-import time
 import pygame
 import logging
-from lib.utils.sound_manager import SoundManager
 
 logger = logging.getLogger(__name__)
 

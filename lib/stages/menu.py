@@ -3,7 +3,6 @@ import pygame
 from lib.stage import GameStage
 from lib.utils.button import Button
 from lib.utils.button_stack import ButtonStack
-from lib.stages.gameplay import GameplayStage
 from lib.enums.game_events import NEXT_STAGE
 
 logger = logging.getLogger(__name__)
@@ -43,7 +42,7 @@ class Menu(GameStage):
         pygame.event.post(pygame.event.Event(NEXT_STAGE))
 
     def handle_exit(self, button: Button):
-        logger.debug(f"Click exit")
+        logger.debug("Click exit")
         pygame.event.post(pygame.event.Event(pygame.QUIT))
 
     def handle_event(self, event):

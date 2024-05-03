@@ -1,6 +1,6 @@
 import math
 import logging
-from abc import abstractmethod, ABC
+from abc import ABC
 from lib.map.map import GameMap
 from lib.enums.game_events import GHOST_EXITED_HOUSE
 from lib.entity.entity import Entity
